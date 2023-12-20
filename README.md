@@ -89,5 +89,5 @@ to run this project locally, you need to have the following tools installed on y
 
 ### License
 
-Distributed under the GPL-3.0 License. See [LICENCE](LICENCE) for more information.
+Distributed under the GPL-3.0 License. See [LICENCE](LICENCE.md) for more information.
 
