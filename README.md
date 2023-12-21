@@ -46,7 +46,7 @@ Cette approche collaborative vous permet d'améliorer votre CV de manière confi
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" width="20"/> | [Express Js](https://expressjs.com/) - Backend Framework |
 | <img src="https://cdn.sanity.io/images/vftxng62/production/9c68538b07056123775d8aa985d19d4f217eee34-700x275.png" width="20"/> | [Prisma](https://www.prisma.io/) - Object-Relational Mapping (ORM) |
 | <img src="https://www.postgresql.org/media/img/about/press/elephant.png" width="20"/> | [Postgresql](https://www.postgresql.org/) - Database |
-| <img src="https://assets.stickpng.com/images/62a9c7c08ff6441a2952dad3.png" width="20"/> | [Docker](https://www.docker.com/) - Containerization |
+| <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/97_Docker_logo_logos-512.png" width="20"/> | [Docker](https://www.docker.com/) - Containerization |
 | <img src="https://user-images.githubusercontent.com/11247099/145112184-a9ff6727-661c-439d-9ada-963124a281f7.png" width="20"/> | [Vitest](https://vitest.dev/) - Test Tool |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Jenkins_logo.svg/1200px-Jenkins_logo.svg.png" width="20"/> | [Jenkins](https://www.jenkins.io/) - CI/CD |
 | <img src="https://static-00.iconduck.com/assets.00/terraform-icon-1803x2048-hodrzd3t.png" width="20"/> | [Terraform](https://www.terraform.io/) - Infrastructure as Code (IaC) |
