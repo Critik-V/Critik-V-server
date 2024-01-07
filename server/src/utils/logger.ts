@@ -20,13 +20,21 @@ const table: Function = (
   status: string
 ): string => `
 +----------+-------------------------------------------------------+------+
- ${name}    ${message}                ${status}          
+ ${name}    ${message}                 ${status}          
 +----------+-------------------------------------------------------+------+
  `;
 
 // fonction who display when the database is connected
 const successDbLogger: loggerType = (): void =>
-  console.log(chalk.green(table("Database", "Database is connected", "✅")));
+  console.log(
+    chalk.green(
+      table(
+        chalk.bgGray("Database"),
+        chalk.green(`Database is connected`),
+        "✅"
+      )
+    )
+  );
 
 // fonction who display when the database fail to connect
 const errorDbLogger: loggerType = (): void =>
@@ -35,12 +43,12 @@ const errorDbLogger: loggerType = (): void =>
 // fonction who display when the server is running
 const successServerLogger: loggerType = (): void =>
   console.log(
-    chalk.blue(
-      table(
-        "Server",
-        `Server is running on http://${process.env.HOST}:${process.env.PORT}`,
-        "✅"
-      )
+    table(
+      chalk.bgGray("Server"),
+      `Server is running on ${chalk.blue(
+        `http://${process.env.HOST}:${process.env.PORT}`
+      )}`,
+      "✅"
     )
   );
 // fonction who display when the server fail to run
