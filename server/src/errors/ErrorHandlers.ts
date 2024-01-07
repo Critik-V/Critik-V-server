@@ -4,8 +4,8 @@
 
 // ---------------------- IMPORTS ---------------------- //
 import { NextFunction, Request, Response } from "express";
-import statusCodes from "@utils/statusCodes";
-import Panic from "@errors/Panic";
+import statusCodes from "../utils/statusCodes";
+import Panic from "./Panic";
 // ---------------------- TYPE DEFINITIONS ---------------------- //
 type errType = Error;
 type reqType = Request;

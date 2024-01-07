@@ -3,7 +3,7 @@
  */
 // ---------------------- IMPORTS ---------------------- //
 // import { PrismaClient } from "@prisma/client";
-import logger from "@utils/logger";
+import logger from "../utils/logger";
 // ---------------------- MAIN ---------------------- //
 const database = async () => {
 //   const prisma = new PrismaClient();

@@ -4,9 +4,9 @@
   "description": "critik-v server side",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon ./src/server.ts",
+    "dev": "nodemon ./src/main.ts",
     "compile": "tsc",
-    "start": "npm run compile && node ./dist/server.js"
+    "start": "npm run compile && node ./dist/main.js"
   },
   "author": "Critik-V Core Team",
   "license": "ISC",
