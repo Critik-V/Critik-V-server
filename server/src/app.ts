@@ -1,3 +1,7 @@
+/**
+ * this file is for the express application
+ */
+
 // -------------------- IMPORTS -------------------- //
 import express, { Application, NextFunction, Request, Response } from "express";
 import morgan from "morgan";

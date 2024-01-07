@@ -29,7 +29,7 @@ const successDbLogger: loggerType = (): void =>
   console.log(
     chalk.green(
       table(
-        chalk.bgGray("Database"),
+        chalk.bgGray(chalk.bold(" Database ")),
         chalk.green(`Database is connected`),
         "✅"
       )
@@ -44,7 +44,7 @@ const errorDbLogger: loggerType = (): void =>
 const successServerLogger: loggerType = (): void =>
   console.log(
     table(
-      chalk.bgGray("Server"),
+      chalk.bgGray(chalk.bold(" Server ")),
       `Server is running on ${chalk.blue(
         `http://${process.env.HOST}:${process.env.PORT}`
       )}`,
