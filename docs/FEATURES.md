@@ -38,6 +38,9 @@ Bienvenue sur la plateforme d'amélioration de CV, votre allié pour renforcer v
 - [ ] **Examiner un CV** : En tant qu'utilisateur, je peux examiner un CV en donnant une note (/10) et un commentaire anonyme.
 - [ ] **Modifier mon examen** : En tant qu'utilisateur, je peux modifier mon examen.
 - [ ] **Supprimer mon examen** : En tant qu'utilisateur, je peux supprimer mon examen.
+- [ ] **Mettre un like sur un examen** : En tant qu'utilisateur, je peux mettre un like sur un examen.
+- [ ] **upliker un commentaire** : En tant qu'utilisateur, je peux upliker un commentaire.
+- [ ] **downliker un commentaire** : En tant qu'utilisateur, je peux downliker un commentaire.
 
 ### Fonctionnalité 5 : Sauvegarder un CV
 
