@@ -3,17 +3,16 @@
  */
 
 // --------------------- IMPORTS --------------------- //
-import path from "node:path";
-import { config } from "dotenv";
-import app from "./app";
-import server from "./config/server";
-
+import { resolve } from 'node:path';
+import { config } from 'dotenv';
+import app from './app';
+import server from './config/server';
+import database from './config/database';
 // -------------------- CONFIG -------------------- //
 config({
-  path: path.resolve(__dirname, "../.env"),
+	path: resolve(__dirname, '../.env'),
 });
-
 // -------------------- DATABASE -------------------- //
-
+database();
 // -------------------- SERVER -------------------- //
 server(app);
