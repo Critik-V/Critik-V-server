@@ -12,20 +12,58 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  password  String
+  oauthId    String   @unique
+  firstName String
+  lastName  String
+  description String?
+  linkedinLink String?
+  githubLink String?
+  myPosts  Post[]
+  likedPosts Post[] @relation("PostLikes")
+  favPosts Post[] @relation("PostFavorites")
+  comments Comment[]
+  commentsUpLikes Comment[] @relation("CommentUpLikes")
+  commentsDownLikes Comment[] @relation("CommentDownLikes")
+  notifications Notification[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts     Post[]
 }
 
 model Post {
   id        String   @id @default(uuid())
-  title     String
+  title    String
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
+  archived  Boolean  @default(false)
+  likes     User[]  @relation("PostLikes")
+  likesCount Int @default(0)
+  favByUsers User[] @relation("PostFavorites")
+  totalFav Int @default(0)
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  totalUpLikes Int @default(0)
+  totalDownLikes Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  upLikes User[] @relation("CommentUpLikes")
+  downLikes User[] @relation("CommentDownLikes")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  content   String
+  receiver    User     @relation(fields: [receiverId], references: [id])
+  receiverId  String
+  read Boolean @default(false)
+  createdAt DateTime @default(now())
 }
