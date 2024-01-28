@@ -1,7 +1,3 @@
-/**
- * this class is used to throw errors in the application
- */
-
 class Panic extends Error {
   status: string;
   isOperational: boolean;

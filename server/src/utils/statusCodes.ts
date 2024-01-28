@@ -3,7 +3,12 @@
 */
 // ---------------------- TYPE DEFINITIONS ---------------------- //
 type statusCodesType = {
-  [key: string]: number;
+  OK: number;
+  CREATED: number;
+  BAD_REQUEST: number;
+  UNAUTHORIZED: number;
+  NOT_FOUND: number;
+  INTERNAL_SERVER_ERROR: number;
 };
 // ---------------------- MAIN ---------------------- //
 const statusCodes: statusCodesType = {

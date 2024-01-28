@@ -5,16 +5,17 @@
 import { PrismaClient } from '@prisma/client';
 import logger from '../utils/logger';
 // ---------------------- MAIN ---------------------- //
-const database = async () => {
-	const prisma = new PrismaClient();
+export const db = new PrismaClient({
+	log: ['error', 'warn'],
+});
+
+export const database = async () => {
 	try {
-		await prisma.$connect();
+		await db.$connect();
 		logger.successDbLogger();
 	} catch (err) {
 		logger.errorDbLogger();
 	} finally {
-		await prisma.$disconnect();
+		await db.$disconnect();
 	}
 };
-// ---------------------- EXPORTS ---------------------- //
-export default database;

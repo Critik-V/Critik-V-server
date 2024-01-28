@@ -38,9 +38,7 @@ const successServerLogger: loggerType = (): void =>
 	console.log(
 		table(
 			chalk.bgGray(chalk.bold(' Server ')),
-			`Server is running on ${chalk.blue(
-				`http://${process.env.HOST}:${process.env.PORT}`
-			)}`,
+			`Server is running on ${chalk.blue(process.env.API_ORIGIN)}`,
 			'✅'
 		)
 	);

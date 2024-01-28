@@ -1,26 +1,23 @@
-/**
- * this file is for the express application
- */
-
 // -------------------- IMPORTS -------------------- //
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import morgan from 'morgan';
-import Panic from './errors/Panic';
-import ErrorHandlers from './errors/ErrorHandlers';
-import statusCodes from './utils/statusCodes';
 import helmet from 'helmet';
+import cors, { CorsOptions } from 'cors';
 // -------------------- CONFIG -------------------- //
 const app: Application = express();
+
+const corsOrginList: string[] = [`${process.env.CLIENT_URL}`];
+const corsAllowedHeadersList: string[] = ['Content-Type', 'Authorization'];
+const corsOptions: CorsOptions = {
+	origin: corsOrginList,
+	optionsSuccessStatus: 200,
+	allowedHeaders: corsAllowedHeadersList,
+};
 // -------------------- MIDDLEWARES -------------------- //
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(helmet());
-// -------------------- ROUTES -------------------- //
-app.all('*', (req: Request, res: Response, next: NextFunction) =>
-	next(new Panic('Not Found', statusCodes.NOT_FOUND))
-);
-// -------------------- ERRORS -------------------- //
-app.use(ErrorHandlers);
 // -------------------- EXPORTS -------------------- //
 export default app;

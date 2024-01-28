@@ -10,18 +10,21 @@ type statusCodeType = number;
 type dataTypes = {
 	[key: string]:
 		| string
+		| null
 		| number
 		| boolean
 		| object
-		| Array<string | number | boolean | object>;
+		| Array<string | number | boolean | object | null>;
 };
 // ---------------------- MAIN ---------------------- //
 const response = (
 	res: responseType,
 	statusCode: statusCodeType,
+	message: string | undefined,
 	data: dataTypes
 ) => {
 	return res.status(statusCode).json({
+		message,
 		status: 'success',
 		data,
 	});

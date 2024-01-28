@@ -6,11 +6,11 @@ type resType = Response;
 type nextType = NextFunction;
 type catchAsyncType = (
 	fn: (req: reqType, res: resType, next: nextType) => Promise<void>
-) => void;
+) => (req: reqType, res: resType, next: nextType) => Promise<void>;
 // ---------------------- MAIN ---------------------- //
 const catchAsync: catchAsyncType = fn => {
-	return (req: reqType, res: resType, next: nextType) => {
-		fn(req, res, next).catch(next);
+	return async (req: reqType, res: resType, next: nextType) => {
+		await fn(req, res, next).catch(next);
 	};
 };
 // ---------------------- EXPORTS ---------------------- //
