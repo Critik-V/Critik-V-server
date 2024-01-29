@@ -21,7 +21,7 @@ const response = (
 	res: responseType,
 	statusCode: statusCodeType,
 	message: string | undefined,
-	data: dataTypes
+	data: dataTypes | dataTypes[] | undefined
 ) => {
 	return res.status(statusCode).json({
 		message,
