@@ -7,6 +7,7 @@ import { commentRouter, notifRouter, postRouter, userRouter } from './routes';
 import { apiRoutePrefix, statusCodes } from './utils';
 // -------------------- DATABASE -------------------- //
 database();
+
 // -------------------- ROUTES -------------------- //
 app.use(apiRoutePrefix('users'), userRouter);
 app.use(apiRoutePrefix('posts'), postRouter);

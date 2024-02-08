@@ -10,22 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum language {
+  fr
+  en
+}
+
+enum theme {
+  light
+  dark
+}
+
 model User {
   id                String         @id @default(uuid())
   oauthId           String         @unique
-  firstName         String
-  lastName          String
+  fullname          String
   description       String?
   linkedinLink      String?
   githubLink        String?
   myPosts           Post[]
-  likedPosts        Post[]         @relation("PostLikes")
   favPosts          Post[]         @relation("PostFavorites")
   comments          Comment[]
   commentsUpLikes   Comment[]      @relation("CommentUpLikes")
   commentsDownLikes Comment[]      @relation("CommentDownLikes")
   notifications     Notification[]
   createdAt         DateTime       @default(now())
+  language          language       @default(fr)
+  theme             theme          @default(light)
 }
 
 enum JobType {
@@ -56,12 +66,10 @@ model Post {
   author            User             @relation(fields: [authorId], references: [id])
   authorId          String
   archived          Boolean          @default(false)
-  likes             User[]           @relation("PostLikes")
-  likesCount        Int              @default(0)
   favByUsers        User[]           @relation("PostFavorites")
   totalFav          Int              @default(0)
   comments          Comment[]
-  resumePath        String?         
+  resumePath        String?
 }
 
 model Comment {
