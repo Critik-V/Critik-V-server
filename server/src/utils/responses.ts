@@ -1,9 +1,4 @@
 import { Response } from 'express';
-
-/**
- * this function is used to send response to the client
- */
-
 // ---------------------- TYPE DEFINITIONS ---------------------- //
 type responseType = Response;
 type statusCodeType = number;
@@ -21,11 +16,13 @@ const response = (
 	res: responseType,
 	statusCode: statusCodeType,
 	message: string | undefined,
-	data: dataTypes | dataTypes[] | undefined
+	data: dataTypes | dataTypes[] | undefined,
+	length?: number
 ) => {
 	return res.status(statusCode).json({
 		message,
 		status: 'success',
+		length: data ? (Array.isArray(data) ? data.length : length) : 0,
 		data,
 	});
 };

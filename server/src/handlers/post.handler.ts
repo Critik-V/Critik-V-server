@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { catchAsync, response, statusCodes } from '../utils';
 import { Post } from '@prisma/client';
 import { db } from '../config';
 import fs from 'node:fs';
+import { Panic } from '../errors';
 
 export const getNewestPosts = catchAsync(
 	async (req: Request, res: Response) => {
@@ -35,18 +36,9 @@ export const getNewestPosts = catchAsync(
 				createdAt: 'desc',
 			},
 			where: {
-				OR: [
-					{
-						title: {
-							contains: search,
-						},
-					},
-					{
-						description: {
-							contains: search,
-						},
-					},
-				],
+				title: {
+					contains: search,
+				},
 				archived: false,
 				jobType,
 				experienceLevel,
@@ -60,19 +52,12 @@ export const getNewestPosts = catchAsync(
 	}
 );
 
-export const makePost = catchAsync(async (req: Request, res: Response) => {
-	const { file } = req;
-	const {
-		title,
-		description,
-		jobType,
-		experienceLevel,
-		establishmentName,
-		domain,
-		authorId,
-	}: Post = req.body;
-	const newPost = await db.post.create({
-		data: {
+export const makePost = catchAsync(
+	async (req: Request, res: Response, next: NextFunction) => {
+		const { file } = req;
+		if (!file)
+			return next(new Panic('no file uploaded', statusCodes.BAD_REQUEST));
+		const {
 			title,
 			description,
 			jobType,
@@ -80,22 +65,33 @@ export const makePost = catchAsync(async (req: Request, res: Response) => {
 			establishmentName,
 			domain,
 			authorId,
-		},
-	});
+		}: Post = req.body;
+		const newPost = await db.post.create({
+			data: {
+				title,
+				description,
+				jobType,
+				experienceLevel,
+				establishmentName,
+				domain,
+				authorId,
+			},
+		});
 
-	const filename = `${newPost.id}.pdf`;
-	const destinationDirectory = 'resumes/';
+		const filename = `${newPost.id}.pdf`;
+		const destinationDirectory = 'resumes/';
 
-	if (!fs.existsSync(destinationDirectory)) {
-		fs.mkdirSync(destinationDirectory);
+		if (!fs.existsSync(destinationDirectory)) {
+			fs.mkdirSync(destinationDirectory);
+		}
+
+		if (file) {
+			fs.writeFileSync(destinationDirectory + filename, file.buffer);
+		}
+
+		response(res, statusCodes.CREATED, 'post created succesfully', newPost);
 	}
-
-	if (file) {
-		fs.writeFileSync(destinationDirectory + filename, file.buffer);
-	}
-
-	response(res, statusCodes.CREATED, 'post created succesfully', newPost);
-});
+);
 
 export const modifyPost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
@@ -148,8 +144,8 @@ export const archivePost = catchAsync(async (req: Request, res: Response) => {
 	const { authorId }: Post = req.body;
 	await db.post.update({
 		where: {
-			id: id,
-			authorId: authorId,
+			id,
+			authorId,
 		},
 		data: {
 			archived: true,
@@ -165,15 +161,18 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 	const { authorId }: Post = req.body;
 	const posts = await db.post.findMany({
 		where: {
-			authorId: authorId,
+			authorId,
 			archived: false,
 		},
 		include: {
-			comments: true,
-			favByUsers: true,
+			favByUsers: {
+				select: {
+					id: true,
+				},
+			},
 		},
 	});
-	response(res, statusCodes.OK, 'posts fetched succesfully', posts);
+	response(res, statusCodes.OK, 'my posts fetched succesfully', posts);
 });
 
 export const getOnePost = catchAsync(async (req: Request, res: Response) => {
@@ -200,15 +199,11 @@ export const getArchivedPosts = catchAsync(
 		const { authorId }: Post = req.body;
 		const posts = await db.post.findMany({
 			where: {
-				authorId: authorId,
+				authorId,
 				archived: true,
 			},
-			include: {
-				comments: true,
-				favByUsers: true,
-			},
 		});
-		response(res, statusCodes.OK, 'posts fetched succesfully', posts);
+		response(res, statusCodes.OK, 'archived posts fetched successfully', posts);
 	}
 );
 
@@ -216,10 +211,10 @@ export const getOneArchivedPost = catchAsync(
 	async (req: Request, res: Response) => {
 		const { id }: { id: string } = req.params as { id: string };
 		const { authorId }: Post = req.body;
-		const post = await db.post.findFirst({
+		const post = await db.post.findUnique({
 			where: {
-				id: id,
-				authorId: authorId,
+				id,
+				authorId,
 				archived: true,
 			},
 			include: {
@@ -229,7 +224,7 @@ export const getOneArchivedPost = catchAsync(
 		});
 		res.status(statusCodes.OK).json({
 			status: 'success',
-			message: 'post fetched succesfully',
+			message: 'post archived fetched succesfully',
 			data: post,
 		});
 	}
