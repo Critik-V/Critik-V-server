@@ -31,7 +31,8 @@ export const updateComment = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const deleteComment = catchAsync(async (req: Request, res: Response) => {
-	const { authorId, id }: Comment = req.body;
+	const { id }: { id: string } = req.params as { id: string };
+	const { authorId }: Comment = req.body;
 	await db.comment.delete({
 		where: {
 			id,
@@ -65,7 +66,7 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 	}
 	const { id }: { id: string } = req.params as { id: string };
 	const { action } = req.query as { action: likeAction };
-	const { authorId }: Comment = req.body;
+	const { userId }: { userId: string } = req.body;
 	await db.comment.update({
 		where: {
 			id,
@@ -75,7 +76,7 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 				? {
 						upLikes: {
 							connect: {
-								id: authorId,
+								id: userId,
 							},
 						},
 						totalUpLikes: { increment: 1 },
@@ -83,7 +84,7 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 				: {
 						upLikes: {
 							disconnect: {
-								id: authorId,
+								id: userId,
 							},
 						},
 						totalUpLikes: { decrement: 1 },
@@ -100,7 +101,7 @@ export const downlikeComment = catchAsync(
 		}
 		const { id }: { id: string } = req.params as { id: string };
 		const { action } = req.query as { action: likeAction };
-		const { authorId }: Comment = req.body;
+		const { userId }: { userId: string } = req.body;
 		await db.comment.update({
 			where: {
 				id,
@@ -110,7 +111,7 @@ export const downlikeComment = catchAsync(
 					? {
 							downLikes: {
 								connect: {
-									id: authorId,
+									id: userId,
 								},
 							},
 							totalDownLikes: { increment: 1 },
@@ -118,7 +119,7 @@ export const downlikeComment = catchAsync(
 					: {
 							downLikes: {
 								disconnect: {
-									id: authorId,
+									id: userId,
 								},
 							},
 							totalDownLikes: { decrement: 1 },

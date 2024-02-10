@@ -4,11 +4,15 @@ import { commentHandler } from '../handlers';
 const router = Router();
 
 router
-	.get('/', commentHandler.getPostComments)
-	.post('/', commentHandler.createComment)
-	.delete('/', commentHandler.deleteComment);
-router.post('/:id', commentHandler.updateComment);
-router.post('/like/:id', commentHandler.uplikeComment);
-router.post('/dislike/:id', commentHandler.downlikeComment);
+	.route('/')
+	.get(commentHandler.getPostComments)
+	.post(commentHandler.createComment);
+
+router
+	.route('/:id')
+	.patch(commentHandler.updateComment)
+	.delete(commentHandler.deleteComment);
+router.route('/like/:id').patch(commentHandler.uplikeComment);
+router.route('/dislike/:id').patch(commentHandler.downlikeComment);
 
 export default router;

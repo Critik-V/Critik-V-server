@@ -22,9 +22,9 @@ app.all('*', (req: Request, res: Response, next: NextFunction) =>
 app.use(ErrorHandlers);
 // -------------------- SERVER -------------------- //
 if (process.env.NODE_ENV === 'development') {
-	expressListRoutes(userRouter, { prefix: apiRoutePrefix('users') });
-	expressListRoutes(postRouter, { prefix: apiRoutePrefix('posts') });
-	expressListRoutes(commentRouter, { prefix: apiRoutePrefix('comments') });
-	expressListRoutes(notifRouter, { prefix: apiRoutePrefix('notifications') });
+	expressListRoutes(userRouter, { prefix: apiRoutePrefix('users'), spacer: 15 });
+	expressListRoutes(postRouter, { prefix: apiRoutePrefix('posts'), spacer: 15 });
+	expressListRoutes(commentRouter, { prefix: apiRoutePrefix('comments'), spacer: 15 });
+	expressListRoutes(notifRouter, { prefix: apiRoutePrefix('notifications'), spacer: 15 });
 }
 server(app);
