@@ -1,0 +1,48 @@
+// Mixin for ellipsis
+@mixin ellipsis() {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+// Mixin for background gradient
+@mixin background-gradient($start-color, $end-color) {
+    background: $start-color;
+    background: -moz-linear-gradient(top, $start-color 0%, $end-color 100%);
+    background: -webkit-linear-gradient(top, $start-color 0%, $end-color 100%);
+    background: linear-gradient(to bottom, $start-color 0%, $end-color 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}', GradientType=0);
+}
+
+// Mixin for absolute centering
+@mixin absolute-center($width, $height) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -($height / 2);
+    margin-left: -($width / 2);
+}
+
+// full element
+@mixin full() {
+    width: 100%;
+    height: 100%;
+}
+
+// btn-effect
+@mixin btn-effect($effect) {
+    @if $effect =="hover" {
+        &:hover {
+            transform: scale(1.01);
+        }
+    }
+
+    @else if $effect =="active" {
+        &:active {
+            filter: brightness(0.99);
+            transform: scale(0.99);
+        }
+    }
+
+    @else {}
+}

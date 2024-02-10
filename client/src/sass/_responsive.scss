@@ -1,0 +1,47 @@
+// ======================================================== READ ME BEFORE USING ME ========================================================
+
+// Code: SCSS
+// Description: Responsive mixins for mobile, tablet, desktop and large desktop
+// reusable for all projects, if you want to change the breakpoints, you can do it here
+// Dependencies: None
+// Last Modified: 04/11/2023
+// Author: Yannick KOUAKOU | Github: yannick2009 | LinkedIn: https://www.linkedin.com/in/yannick-k-946970200/
+
+// ==========================================================================================================================================
+
+$breakpoint-mobile: 600px;
+$breakpoint-tablet-portrait: 600px;
+$breakpoint-tablet-landscape: 768px;
+$breakpoint-desktop: 992px;
+$breakpoint-large-desktop: 1200px;
+
+// responsive for mobile phone
+@mixin mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+// responsive for tablet portrait
+@mixin tablet-portrait {
+  @media (max-width: $breakpoint-tablet-portrait) {
+    @content;
+  }
+}
+// responsive for tablet landscape
+@mixin tablet-landscape {
+  @media (max-width: $breakpoint-tablet-landscape) {
+    @content;
+  }
+}
+// responsive for desktop
+@mixin desktop {
+  @media (max-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+// responsive for large desktop
+@mixin large-desktop {
+  @media (max-width: $breakpoint-large-desktop) {
+    @content;
+  }
+}
