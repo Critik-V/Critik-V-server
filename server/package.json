@@ -4,6 +4,7 @@
   "description": "critik-v server side",
   "main": "server.js",
   "scripts": {
+    "migrate": "pnpm prisma migrate deploy",
     "compile": "tsc -w",
     "dev": "node --env-file=.env --watch ./dist/main.js",
     "start": "tsc && node --env-file=.env ./dist/main.js"
