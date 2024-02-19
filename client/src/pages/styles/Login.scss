@@ -1,0 +1,60 @@
+@import "@sass/main.scss";
+
+.Login {
+    height: 100dvh;
+    width: 100%;
+    // background: linear-gradient(rgba(7, 190, 184, 0.7), rgba(61, 204, 199, 0.7)), url("./login-bg.jpeg");
+    background: linear-gradient(rgba(7, 190, 184, 0.4), rgba(61, 204, 199, 0.2)), url("./login-bg.jpeg");
+
+
+    & div {
+        background: white;
+        min-width: 300px;
+        max-width: 400px;
+        height: fit-content;
+        border-radius: 10px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        @include absolute-center;
+
+        h6 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: $color-primary;
+        }
+
+        &>* {
+            margin: .7rem 0;
+        }
+
+        & p {
+            font-size: 1rem;
+            font-weight: 200;
+            text-align: justify;
+            width: 90%;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem 0;
+            border-radius: 10px;
+            border: 0;
+            background: $color-secondary;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include btn-effect(active);
+
+            img {
+                width: 20px;
+                height: 20px;
+                margin: 0 1rem;
+            }
+        }
+    }
+}
