@@ -7,6 +7,9 @@
     "migrate": "pnpm prisma migrate deploy",
     "compile": "tsc",
     "dev": "node --env-file=.env ./dist/main.js",
+    "migrate": "pnpm prisma migrate deploy",
+    "compile": "tsc",
+    "dev": "node --env-file=.env ./dist/main.js",
     "start": "tsc && node --env-file=.env ./dist/main.js"
   },
   "author": "Critik-V Core Team",
