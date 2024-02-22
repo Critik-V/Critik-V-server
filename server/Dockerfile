@@ -12,8 +12,8 @@ RUN npm install -g pnpm
 COPY . .
 
 # running file generation .env 
-RUN chmod +x generate-env.sh
-RUN ./generate-env.sh
+RUN chmod +x /app/scripts_server/generate-env.sh
+RUN /app/scripts_server/generate-env.sh
 
 
 # install requirement with pnpm

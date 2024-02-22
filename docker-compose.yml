@@ -6,7 +6,7 @@ services:
     container_name: db_critick
 
     #include the file with the environment variables 
-    env_file: server/.config_db
+    env_file: server/scripts_server/.config_db
     ports:
       - "5433:5432"
     networks:

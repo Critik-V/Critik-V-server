@@ -3,10 +3,10 @@
 # file of out
 OUTPUT_FILE=.env
 
-#include all exorted variables
-source .config_variable
+# include all exorted variables
+source scripts_server/.config_variable
 
-#writing all variable in the file .env
+# writing all variable in the file .env
 echo "# SERVER" > $OUTPUT_FILE
 echo "NODE_ENV=\"$NODE_ENV\"" >> $OUTPUT_FILE
 echo "PORT=$PORT" >> $OUTPUT_FILE
@@ -49,4 +49,4 @@ echo "" >> $OUTPUT_FILE
 echo "# SESSION SECRET" >> $OUTPUT_FILE
 echo "SESSION_SECRET=\"$SESSION_SECRET\"" >> $OUTPUT_FILE
 
-echo "Fichier .env généré avec succès!"
+echo "file .env generated successfully !"
