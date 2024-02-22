@@ -1,35 +1,35 @@
-# server/Dockerfile
+# the path : server/Dockerfile
 FROM node:21
 
-# Crée un répertoire de travail dans le conteneur
+# create directory of work in the container
 WORKDIR /app
 
-# Installe pnpm globalement
+# install pnpm globally
 RUN npm install -g pnpm
 
 
-# Copie des fichiers nécessaires dans le conteneur
+# copy the neccesary files in the container
 COPY . .
 
-# Exécution du script de génération du fichier .env
+# running file generation .env 
 RUN chmod +x generate-env.sh
 RUN ./generate-env.sh
 
 
-# Installation des dépendances avec pnpm
+# install requirement with pnpm
 RUN pnpm install
 
 
-# Exécution de la commande de compilation
+# running the compilation 
 RUN pnpm run compile
 
 
-# Exécution de la commande de migration
+# running the migration
 RUN pnpm run migrate
 
 
-# Exposition du port utilisé par le serveur
+# exposure port used by server
 EXPOSE 5000
 
-# Commande pour démarrer le serveur
+# running server
 CMD ["pnpm", "start"]

@@ -1,1 +1,3 @@
-.env.example
+# the files will be ignore during the creation the contenairs
+.config_variable.example
+.config_db.example

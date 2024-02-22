@@ -5,12 +5,12 @@ export HOST="localhost"
 export PROTOCOL="http" 
 
 # database configuration
-export DATABASE_TYPE="postgresql"
-export DATABASE_NAME="db_critick"
-export DATABASE_USER="user_critick"
-export DATABASE_PASSWORD="critick_db_test"
-export DATABASE_HOST="host.docker.internal"
-export DATABASE_PORT=5433
+export DATABASE_TYPE="DATABASE_TYPE"  # postgres, mysql, mariadb, sqlite, mssql
+export DATABASE_NAME="DATABASE_NAME"  # database name
+export DATABASE_USER="DATABASE_USER" # database user
+export DATABASE_PASSWORD="DATABASE_PASSWORD" # database password
+export DATABASE_HOST="localhost" # database host
+export DATABASE_PORT=0000  # database port
 
 export DATABASE_URL="${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}"
 

@@ -1,16 +1,18 @@
 version: '3'
 services:
+  # creation of database
   db_critick:
     image: postgres:latest
-    environment:
-      POSTGRES_USER: user_critick
-      POSTGRES_PASSWORD: critick_db_test
-      POSTGRES_DB: db_critick
+    container_name: db_critick
+
+    #include the file with the environment variables 
+    env_file: server/.config_db
     ports:
       - "5433:5432"
     networks:
       - critik_network
 
+  # creation of backend
   backend_critick:
     build:
       context: ./server
@@ -21,6 +23,8 @@ services:
     networks:
       - critik_network
 
+# networking configuration
+# the two contenairs will be in the same network
 networks:
   critik_network:
     driver: bridge
