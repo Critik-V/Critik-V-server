@@ -1,0 +1,30 @@
+version: '3'
+services:
+  # creation of database
+  db_critick:
+    image: postgres:latest
+    container_name: db_critick
+
+    #include the file with the environment variables 
+    env_file: server/scripts_server/.config_db
+    ports:
+      - "5433:5432"
+    networks:
+      - critik_network
+
+  # creation of backend
+  backend_critick:
+    build:
+      context: ./server
+    ports:
+      - "8000:5000"
+    depends_on:
+      - db_critick
+    networks:
+      - critik_network
+
+# networking configuration
+# the two contenairs will be in the same network
+networks:
+  critik_network:
+    driver: bridge

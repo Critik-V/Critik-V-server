@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# file of out
+OUTPUT_FILE=.env
+
+# include all exorted variables
+source scripts_server/.config_variable
+
+# writing all variable in the file .env
+echo "# SERVER" > $OUTPUT_FILE
+echo "NODE_ENV=\"$NODE_ENV\"" >> $OUTPUT_FILE
+echo "PORT=$PORT" >> $OUTPUT_FILE
+echo "HOST=\"$HOST\"" >> $OUTPUT_FILE
+echo "PROTOCOL=\"$PROTOCOL\"" >> $OUTPUT_FILE
+
+echo "" >> $OUTPUT_FILE
+
+echo "# DATABASE" >> $OUTPUT_FILE
+echo "DATABASE_TYPE=\"$DATABASE_TYPE\"" >> $OUTPUT_FILE
+echo "DATABASE_NAME=\"$DATABASE_NAME\"" >> $OUTPUT_FILE
+echo "DATABASE_USER=\"$DATABASE_USER\"" >> $OUTPUT_FILE
+echo "DATABASE_PASSWORD=\"$DATABASE_PASSWORD\"" >> $OUTPUT_FILE
+echo "DATABASE_HOST=\"$DATABASE_HOST\"" >> $OUTPUT_FILE
+echo "DATABASE_PORT=$DATABASE_PORT" >> $OUTPUT_FILE
+
+echo "" >> $OUTPUT_FILE
+echo "DATABASE_URL=\"$DATABASE_URL\"" >> $OUTPUT_FILE
+
+echo "" >> $OUTPUT_FILE
+
+echo "# API" >> $OUTPUT_FILE
+echo "API_PREFIX=\"$API_PREFIX\"" >> $OUTPUT_FILE
+echo "API_NAME=\"$API_NAME\"" >> $OUTPUT_FILE
+echo "API_VERSION=$API_VERSION" >> $OUTPUT_FILE
+
+echo "" >> $OUTPUT_FILE
+echo "API_ORIGIN=\"$API_ORIGIN\"" >> $OUTPUT_FILE
+echo "API_ROUTE_PREFIX=\"$API_ROUTE_PREFIX\"" >> $OUTPUT_FILE
+
+echo "" >> $OUTPUT_FILE
+
+echo "# GOOGLE" >> $OUTPUT_FILE
+echo "GOOGLE_CLIENT_ID=\"$GOOGLE_CLIENT_ID\"" >> $OUTPUT_FILE
+echo "GOOGLE_CLIENT_SECRET=\"$GOOGLE_CLIENT_SECRET\"" >> $OUTPUT_FILE
+echo "GOOGLE_CALLBACK_URL=\"$GOOGLE_CALLBACK_URL\"" >> $OUTPUT_FILE
+
+echo "" >> $OUTPUT_FILE
+
+echo "# SESSION SECRET" >> $OUTPUT_FILE
+echo "SESSION_SECRET=\"$SESSION_SECRET\"" >> $OUTPUT_FILE
+
+echo "file .env generated successfully !"
