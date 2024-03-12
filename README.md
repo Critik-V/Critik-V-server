@@ -1,7 +1,7 @@
 ![Critik-V logo](./docs/assets/BANNER_README.png)
 
 <h2 align="center">
-Critik-V (Open-source project)
+Critik-V Server Side (Open-source project)
 </h2>
 
 [![GitHub stars](https://img.shields.io/github/stars/Critik-V/Critik-V.svg?style=social&label=Star)](https://github.com/Critik-V/Critik-V)
@@ -32,14 +32,11 @@ Cette approche collaborative vous permet d'améliorer votre CV de manière confi
 
 - To contribute, please see our <a href="./CONTRIBUTING.md">contribution guide</a>
 
-## Tech Stack
+## Server side tech Stack
 
 |                                                                                                                                                                 |                                                                       |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" alt="TypeScript" width="20"/> | [TypeScript](https://www.typescriptlang.org/) - Language              |
-| <img src="https://cdn4.iconfinder.com/data/icons/logos-3/600/React.js_logo-512.png" width="20"/>                                                                | [React Js](https://reactjs.org/) - Language                           |
-| <img src="https://static-00.iconduck.com/assets.00/tailwind-css-icon-2048x1229-u8dzt4uh.png" width="20"/>                                                       | [Tailwind CSS](https://tailwindcss.com/) - CSS Framework              |
-| <img src="https://cdn.freebiesupply.com/logos/large/2x/sass-1-logo-png-transparent.png" width="20"/>                                                            | [Sass/Scss](https://sass-lang.com/) - CSS Preprocessor                |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" alt="TypeScript" width="20"/> | [TypeScript](https://www.typescriptlang.org/) - Language           
 | <img src="https://cdn-icons-png.flaticon.com/512/5968/5968322.png" width="20"/>                                                                                 | [Node Js](https://nodejs.org/en/) - Development Environment           |
 | <img src="https://pnpm.io/img/pnpm.svg" width="20"/>                                                                                                            | [pnpm](https://pnpm.io/) - Dependency Manager                         |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" width="20"/>                                                                       | [Express Js](https://expressjs.com/) - Backend Framework              |
@@ -47,10 +44,7 @@ Cette approche collaborative vous permet d'améliorer votre CV de manière confi
 | <img src="https://www.postgresql.org/media/img/about/press/elephant.png" width="20"/>                                                                           | [Postgresql](https://www.postgresql.org/) - Database                  |
 | <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/97_Docker_logo_logos-512.png" width="20"/>                                                | [Docker](https://www.docker.com/) - Containerization                  |
 | <img src="https://user-images.githubusercontent.com/11247099/145112184-a9ff6727-661c-439d-9ada-963124a281f7.png" width="20"/>                                   | [Vitest](https://vitest.dev/) - Test Tool                             |
-| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Jenkins_logo.svg/1200px-Jenkins_logo.svg.png" width="20"/>                                  | [Jenkins](https://www.jenkins.io/) - CI/CD                            |
-| <img src="https://static-00.iconduck.com/assets.00/terraform-icon-1803x2048-hodrzd3t.png" width="20"/>                                                          | [Terraform](https://www.terraform.io/) - Infrastructure as Code (IaC) |
-| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Ansible_logo.svg/2048px-Ansible_logo.svg.png" width="20"/>                                  | [Ansible](https://www.ansible.com/) - Infrastructure as Code (IaC)    |
-| <img src="https://static-00.iconduck.com/assets.00/general-awscloud-icon-2048x2048-3trjae80.png" width="20"/>                                                   | [Amazon Web Service](https://aws.amazon.com/) - Hosting               |
+
 
 ## Local Development
 
@@ -70,7 +64,7 @@ to run this project locally, you need to have the following tools installed on y
 1. Clone the repository
 
    ```sh
-   git clone https://github.com/Critik-V/Critik-V.git
+   git clone https://github.com/Critik-V/Critik-V-server.git
    ```
 
 2. Install pnpm
