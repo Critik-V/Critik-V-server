@@ -15,7 +15,7 @@ Critik-V Server Side (Open-source project)
 ![GitHub license](https://img.shields.io/github/license/Critik-V/Critik-V.svg)
 
 <p align="center">
-    <a href="https://discord.gg/Bw9Aa7zC">Discord Community</a> | <a href="./CONTRIBUTING.md">Contribution Guide</a>
+    <a href="https://discord.gg/Bw9Aa7zC">Discord Community</a> | <a href="./docs/CONTRIBUTING.md">Contribution Guide</a>
 </p>
 
 ## About this project
@@ -30,7 +30,7 @@ Cette approche collaborative vous permet d'améliorer votre CV de manière confi
 
 ## Contributing
 
-- To contribute, please see our <a href="./CONTRIBUTING.md">contribution guide</a>
+- To contribute, please see our <a href="./docs/CONTRIBUTING.md">contribution guide</a>
 
 ## Server side tech Stack
 
@@ -85,4 +85,4 @@ to run this project locally, you need to have the following tools installed on y
 
 ### License
 
-Distributed under the GPL-3.0 License. See [LICENSE](LICENSE) for more information.
+Distributed under the GPL-3.0 License. See [LICENSE](/docs/LICENSE) for more information.
