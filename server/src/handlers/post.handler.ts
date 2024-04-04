@@ -62,8 +62,7 @@ export const makePost = catchAsync(
 			description,
 			jobType,
 			experienceLevel,
-			establishmentName,
-			domain,
+
 			authorId,
 		}: Post = req.body;
 		const newPost = await db.post.create({
@@ -72,8 +71,6 @@ export const makePost = catchAsync(
 				description,
 				jobType,
 				experienceLevel,
-				establishmentName,
-				domain,
 				authorId,
 			},
 		});
@@ -95,15 +92,8 @@ export const makePost = catchAsync(
 
 export const modifyPost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const {
-		authorId,
-		title,
-		description,
-		jobType,
-		experienceLevel,
-		establishmentName,
-		domain,
-	}: Post = req.body;
+	const { authorId, title, description, jobType, experienceLevel }: Post =
+		req.body;
 	const post = await db.post.update({
 		where: {
 			id: id,
@@ -114,8 +104,6 @@ export const modifyPost = catchAsync(async (req: Request, res: Response) => {
 			description,
 			jobType,
 			experienceLevel,
-			establishmentName,
-			domain,
 		},
 	});
 
