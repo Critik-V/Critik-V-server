@@ -1,12 +1,1 @@
-# the files will be ignore during the creation the contenairs
-.vscode
-.env.example
-.git
-.gitignore
-.idea
-.eslintrc.*
-.prettierrc
-resumes
-docker-compose.yml
-Dockerfile
 node_modules
