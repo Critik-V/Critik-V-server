@@ -4,11 +4,11 @@
 	"description": "critik-v server side",
 	"main": "server.js",
 	"scripts": {
-		"migrate": "pnpm prisma migrate deploy",
-		"generate": "pnpm prisma generate",
+		"compile:dev": "tsc -w",
+		"start:dev": "node --env-file=.env --watch ./dist/main.js",
 		"compile": "tsc",
-		"dev": "node --env-file=.env ./dist/main.js",
-		"start:dev": "tsc && node --env-file=.env ./dist/main.js",
+		"generate": "pnpm prisma generate",
+		"migrate": "pnpm prisma migrate deploy",
 		"start": "pnpm run migrate && node --env-file=.env ./dist/main.js"
 	},
 	"author": "Critik-V Core Team",
