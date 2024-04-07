@@ -1,1 +1,8 @@
+.eslintrc.*
+.prettierrc
+.vscode
+.idea
+.gitignore
+resumes
+dist
 node_modules

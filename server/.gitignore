@@ -1,6 +1,6 @@
 node_modules
 migrations
+dist
+resumes
 # Keep environment variables out of version control
 .env
-.config_variable
-.config_db
