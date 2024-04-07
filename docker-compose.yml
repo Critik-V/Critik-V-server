@@ -1,30 +1,36 @@
-version: '3'
 services:
-  # creation of database
-  db_critick:
+  db_critik:
     image: postgres:latest
-    container_name: db_critick
+    container_name: db_critik
 
-    #include the file with the environment variables 
-    env_file: server/scripts_server/.config_db
+    env_file: ./server/.env
     ports:
       - "5433:5432"
     networks:
       - critik_network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U admin -d DB -h localhost -p 5432 -t 5 -q 1>/dev/null 2>&1 || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 0
 
   # creation of backend
-  backend_critick:
+  backend_critik:
     build:
       context: ./server
     ports:
-      - "8000:5000"
+      - "5000:5000"
     depends_on:
-      - db_critick
+      db_critik:
+        condition: service_healthy
     networks:
       - critik_network
 
 # networking configuration
-# the two contenairs will be in the same network
 networks:
   critik_network:
     driver: bridge
