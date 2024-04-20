@@ -3,19 +3,12 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import { appSession, passport } from './auth';
-import cors, { CorsOptions } from 'cors';
+import cors from 'cors';
+import { corsOption } from './config';
 // -------------------- CONFIG -------------------- //
 const app: Application = express();
-// -------------------- CORS -------------------- //
-const corsOrginList: string[] = [`${process.env.CLIENT_URL}`];
-const corsAllowedHeadersList: string[] = ['Content-Type', 'Authorization'];
-const corsOptions: CorsOptions = {
-	origin: corsOrginList,
-	optionsSuccessStatus: 200,
-	allowedHeaders: corsAllowedHeadersList,
-};
 // -------------------- MIDDLEWARES -------------------- //
-app.use(cors(corsOptions));
+app.use(cors(corsOption));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(process.env.ENV === 'production' ? 'combined' : 'dev'));
