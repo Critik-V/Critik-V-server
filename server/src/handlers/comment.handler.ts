@@ -39,8 +39,25 @@ export const deleteComment = catchAsync(async (req: Request, res: Response) => {
 			authorId,
 		},
 	});
-	res.status(statusCodes.OK).json({ message: 'comment deleted succesfully' });
+	response(res, statusCodes.OK, 'comment deleted succesfully', undefined);
 });
+
+export const getMyPostComments = catchAsync(
+	async (req: Request, res: Response) => {
+		const { id, authorId }: { id: string; authorId: string } = req.body;
+		const comments = await db.comment.findMany({
+			where: {
+				id,
+				authorId,
+			},
+			include: {
+				upLikes: true,
+				downLikes: true,
+			},
+		});
+		response(res, statusCodes.OK, 'comments fetched succesfully', comments);
+	}
+);
 
 export const getPostComments = catchAsync(
 	async (req: Request, res: Response) => {
@@ -90,7 +107,7 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 						totalUpLikes: { decrement: 1 },
 					},
 	});
-	res.status(statusCodes.OK).json({ message: 'comment liked succesfully' });
+	response(res, statusCodes.OK, 'comment liked succesfully', undefined);
 });
 
 export const downlikeComment = catchAsync(
@@ -125,8 +142,6 @@ export const downlikeComment = catchAsync(
 							totalDownLikes: { decrement: 1 },
 						},
 		});
-		res
-			.status(statusCodes.OK)
-			.json({ message: 'comment disliked succesfully' });
+		response(res, statusCodes.OK, 'comment disliked succesfully', undefined);
 	}
 );

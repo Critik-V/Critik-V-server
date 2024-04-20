@@ -17,13 +17,15 @@ const response = (
 	statusCode: statusCodeType,
 	message: string | undefined,
 	data: dataTypes | dataTypes[] | undefined,
-	length?: number
+	length?: number,
+	totalPages: number | undefined = undefined
 ) => {
 	return res.status(statusCode).json({
 		message,
 		status: 'success',
 		length: data ? (Array.isArray(data) ? data.length : length) : 0,
 		data,
+		totalPages: totalPages ? totalPages : undefined,
 	});
 };
 

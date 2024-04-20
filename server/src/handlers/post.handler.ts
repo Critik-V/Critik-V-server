@@ -1,37 +1,33 @@
 import { NextFunction, Request, Response } from 'express';
 import { catchAsync, response, statusCodes } from '../utils';
-import { Post } from '@prisma/client';
+import { ExprerienceLevel, JobType, Post } from '@prisma/client';
 import { db } from '../config';
 import fs from 'node:fs';
 import { Panic } from '../errors';
 
+const PageLimit: number = 12;
+
 export const getNewestPosts = catchAsync(
 	async (req: Request, res: Response) => {
-		enum JobType {
-			INTERNSHIP = 'INTERNSHIP',
-			APPRENTICESHIP = 'APPRENTICESHIP',
-			FULLTIME = 'FULLTIME',
-			PARTTIME = 'PARTTIME',
-			FREELANCE = 'FREELANCE',
-		}
-		enum ExperienceLevel {
-			ENTRY_LEVEL = 'ENTRY_LEVEL',
-			JUNIOR = 'JUNIOR',
-			MID = 'MID',
-			SENIOR = 'SENIOR',
-		}
 		const {
 			jobType,
 			experienceLevel,
 			search,
-		}: { jobType: JobType; experienceLevel: ExperienceLevel; search: string } =
-			req.query as {
-				jobType: JobType;
-				experienceLevel: ExperienceLevel;
-				search: string;
-			};
+			page,
+		}: {
+			jobType: JobType;
+			experienceLevel: ExprerienceLevel;
+			search: string;
+			page: number;
+		} = req.query as unknown as {
+			page: number;
+			jobType: JobType;
+			experienceLevel: ExprerienceLevel;
+			search: string;
+		};
 		const posts = await db.post.findMany({
-			take: 10,
+			take: PageLimit,
+			skip: (page - 1) * PageLimit,
 			orderBy: {
 				createdAt: 'desc',
 			},
@@ -48,7 +44,17 @@ export const getNewestPosts = catchAsync(
 				favByUsers: true,
 			},
 		});
-		response(res, statusCodes.OK, 'newest posts fetched successfully', posts);
+		// pagination data
+		const totalPosts = await db.post.count();
+		const totalPages = Math.ceil(totalPosts / PageLimit);
+
+		response(
+			res,
+			statusCodes.OK,
+			'newest posts fetched successfully',
+			posts,
+			totalPages
+		);
 	}
 );
 
@@ -160,7 +166,16 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 			},
 		},
 	});
-	response(res, statusCodes.OK, 'my posts fetched succesfully', posts);
+	// pagination data
+	const totalPosts = await db.post.count({ where: { authorId } });
+	const totalPages = Math.ceil(totalPosts / PageLimit);
+	response(
+		res,
+		statusCodes.OK,
+		'my posts fetched succesfully',
+		posts,
+		totalPages
+	);
 });
 
 export const getOnePost = catchAsync(async (req: Request, res: Response) => {
@@ -191,7 +206,18 @@ export const getArchivedPosts = catchAsync(
 				archived: true,
 			},
 		});
-		response(res, statusCodes.OK, 'archived posts fetched successfully', posts);
+		// pagination data
+		const totalPosts = await db.post.count({
+			where: { authorId, archived: true },
+		});
+		const totalPages = Math.ceil(totalPosts / PageLimit);
+		response(
+			res,
+			statusCodes.OK,
+			'archived posts fetched successfully',
+			posts,
+			totalPages
+		);
 	}
 );
 
@@ -261,5 +287,16 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 			favByUsers: true,
 		},
 	});
-	response(res, statusCodes.OK, 'fav posts fetched succesfully', posts);
+	// pagination data
+	const totalPosts = await db.post.count({
+		where: {
+			favByUsers: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+	});
+	const totalPages = Math.ceil(totalPosts / PageLimit);
+	response(res, statusCodes.OK, 'fav posts fetched succesfully', posts, totalPages);
 });
