@@ -18,16 +18,16 @@ export const getNewestPosts = catchAsync(
 			jobType: JobType;
 			experienceLevel: ExprerienceLevel;
 			search: string;
-			page: number;
-		} = req.query as unknown as {
-			page: number;
+			page: string;
+		} = req.query as {
+			page: string;
 			jobType: JobType;
 			experienceLevel: ExprerienceLevel;
 			search: string;
 		};
 		const posts = await db.post.findMany({
 			take: PageLimit,
-			skip: (page - 1) * PageLimit,
+			skip: (page ? +page : 1 - 1) * PageLimit,
 			orderBy: {
 				createdAt: 'desc',
 			},
@@ -153,7 +153,13 @@ export const archivePost = catchAsync(async (req: Request, res: Response) => {
 
 export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 	const { authorId }: Post = req.body;
+	const { page }: { page: string } = req.query as { page: string };
 	const posts = await db.post.findMany({
+		take: PageLimit,
+		skip: (page ? +page : 1 - 1) * PageLimit,
+		orderBy: {
+			createdAt: 'desc',
+		},
 		where: {
 			authorId,
 			archived: false,
@@ -200,7 +206,13 @@ export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 export const getArchivedPosts = catchAsync(
 	async (req: Request, res: Response) => {
 		const { authorId }: Post = req.body;
+		const { page }: { page: string } = req.query as { page: string };
 		const posts = await db.post.findMany({
+			take: PageLimit,
+			skip: (page ? +page : 1 - 1) * PageLimit,
+			orderBy: {
+				createdAt: 'desc',
+			},
 			where: {
 				authorId,
 				archived: true,
@@ -274,7 +286,13 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 
 export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 	const { userId }: { userId: string } = req.body;
+	const { page }: { page: string } = req.query as { page: string };
 	const posts = await db.post.findMany({
+		take: PageLimit,
+		skip: (page ? +page : 1 - 1) * PageLimit,
+		orderBy: {
+			createdAt: 'desc',
+		},
 		where: {
 			favByUsers: {
 				some: {
@@ -298,5 +316,11 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 		},
 	});
 	const totalPages = Math.ceil(totalPosts / PageLimit);
-	response(res, statusCodes.OK, 'fav posts fetched succesfully', posts, totalPages);
+	response(
+		res,
+		statusCodes.OK,
+		'fav posts fetched succesfully',
+		posts,
+		totalPages
+	);
 });

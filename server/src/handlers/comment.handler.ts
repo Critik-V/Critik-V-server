@@ -42,26 +42,11 @@ export const deleteComment = catchAsync(async (req: Request, res: Response) => {
 	response(res, statusCodes.OK, 'comment deleted succesfully', undefined);
 });
 
-export const getMyPostComments = catchAsync(
-	async (req: Request, res: Response) => {
-		const { id, authorId }: { id: string; authorId: string } = req.body;
-		const comments = await db.comment.findMany({
-			where: {
-				id,
-				authorId,
-			},
-			include: {
-				upLikes: true,
-				downLikes: true,
-			},
-		});
-		response(res, statusCodes.OK, 'comments fetched succesfully', comments);
-	}
-);
-
 export const getPostComments = catchAsync(
 	async (req: Request, res: Response) => {
-		const { postId }: { postId: string } = req.params as { postId: string };
+		const { postId }: { postId: string } = req.body as {
+			postId: string;
+		};
 		const comments = await db.comment.findMany({
 			where: {
 				postId,
