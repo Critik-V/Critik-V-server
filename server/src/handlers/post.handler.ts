@@ -7,6 +7,7 @@ import { Panic } from '../errors';
 
 const PageLimit: number = 12;
 
+// GET NEWEST POSTS
 export const getNewestPosts = catchAsync(
 	async (req: Request, res: Response) => {
 		const {
@@ -58,6 +59,7 @@ export const getNewestPosts = catchAsync(
 	}
 );
 
+// MAKE POST
 export const makePost = catchAsync(
 	async (req: Request, res: Response, next: NextFunction) => {
 		const { file } = req;
@@ -96,7 +98,8 @@ export const makePost = catchAsync(
 	}
 );
 
-export const modifyPost = catchAsync(async (req: Request, res: Response) => {
+// MODIFY POST
+export const updatePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
 	const { authorId, title, description, jobType, experienceLevel }: Post =
 		req.body;
@@ -116,6 +119,7 @@ export const modifyPost = catchAsync(async (req: Request, res: Response) => {
 	response(res, statusCodes.OK, 'post modified succesfully', post);
 });
 
+// DELETE POST
 export const deletePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as {
 		id: string;
@@ -133,24 +137,7 @@ export const deletePost = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
-export const archivePost = catchAsync(async (req: Request, res: Response) => {
-	const { id }: { id: string } = req.params as { id: string };
-	const { authorId }: Post = req.body;
-	await db.post.update({
-		where: {
-			id,
-			authorId,
-		},
-		data: {
-			archived: true,
-		},
-	});
-	res.status(statusCodes.OK).json({
-		status: 'success',
-		message: 'post archived succesfully',
-	});
-});
-
+// GET USER POSTS
 export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 	const { authorId }: Post = req.body;
 	const { page }: { page: string } = req.query as { page: string };
@@ -184,6 +171,7 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 	);
 });
 
+// GET ONE POST
 export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
 	const post = await db.post.findFirst({
@@ -203,6 +191,7 @@ export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+// GET ARCHIVED POSTS
 export const getArchivedPosts = catchAsync(
 	async (req: Request, res: Response) => {
 		const { authorId }: Post = req.body;
@@ -233,6 +222,7 @@ export const getArchivedPosts = catchAsync(
 	}
 );
 
+// GET ONE ARCHIVED POST
 export const getOneArchivedPost = catchAsync(
 	async (req: Request, res: Response) => {
 		const { id }: { id: string } = req.params as { id: string };
@@ -256,6 +246,45 @@ export const getOneArchivedPost = catchAsync(
 	}
 );
 
+// ARCHIVE POST
+export const archivePost = catchAsync(async (req: Request, res: Response) => {
+	const { id }: { id: string } = req.params as { id: string };
+	const { authorId }: Post = req.body;
+	await db.post.update({
+		where: {
+			id,
+			authorId,
+		},
+		data: {
+			archived: true,
+		},
+	});
+	res.status(statusCodes.OK).json({
+		status: 'success',
+		message: 'post archived succesfully',
+	});
+});
+
+// UNARCHIVE POST
+export const unarchivePost = catchAsync(async (req: Request, res: Response) => {
+	const { id }: { id: string } = req.params as { id: string };
+	const { authorId }: Post = req.body;
+	await db.post.update({
+		where: {
+			id,
+			authorId,
+		},
+		data: {
+			archived: false,
+		},
+	});
+	res.status(statusCodes.OK).json({
+		status: 'success',
+		message: 'post unarchived succesfully',
+	});
+});
+
+// FAV POST
 export const favPost = catchAsync(async (req: Request, res: Response) => {
 	enum favPostAction {
 		ADD = 'add',
@@ -284,6 +313,7 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 	response(res, statusCodes.OK, 'resume saved succesfully', updatedUser);
 });
 
+// GET FAV POSTS
 export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 	const { userId }: { userId: string } = req.body;
 	const { page }: { page: string } = req.query as { page: string };
