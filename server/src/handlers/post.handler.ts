@@ -40,13 +40,22 @@ export const getNewestPosts = catchAsync(
 				jobType,
 				experienceLevel,
 			},
-			include: {
-				comments: true,
-				favByUsers: true,
-			},
+			// include: {
+			// 	comments: true,
+			// 	favByUsers: true,
+			// },
 		});
 		// pagination data
-		const totalPosts = await db.post.count();
+		const totalPosts = await db.post.count({
+			where: {
+				title: {
+					contains: search,
+				},
+				archived: false,
+				jobType,
+				experienceLevel,
+			},
+		});
 		const totalPages = Math.ceil(totalPosts / PageLimit);
 
 		response(
@@ -151,16 +160,18 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 			authorId,
 			archived: false,
 		},
-		include: {
-			favByUsers: {
-				select: {
-					id: true,
-				},
-			},
-		},
+		// include: {
+		// 	favByUsers: {
+		// 		select: {
+		// 			id: true,
+		// 		},
+		// 	},
+		// },
 	});
 	// pagination data
-	const totalPosts = await db.post.count({ where: { authorId } });
+	const totalPosts = await db.post.count({
+		where: { authorId, archived: false },
+	});
 	const totalPages = Math.ceil(totalPosts / PageLimit);
 	response(
 		res,
@@ -179,10 +190,10 @@ export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 			id: id,
 			archived: false,
 		},
-		include: {
-			comments: true,
-			favByUsers: true,
-		},
+		// include: {
+		// 	comments: true,
+		// 	favByUsers: true,
+		// },
 	});
 	res.status(statusCodes.OK).json({
 		status: 'success',
@@ -233,10 +244,10 @@ export const getOneArchivedPost = catchAsync(
 				authorId,
 				archived: true,
 			},
-			include: {
-				comments: true,
-				favByUsers: true,
-			},
+			// include: {
+			// 	comments: true,
+			// 	favByUsers: true,
+			// },
 		});
 		res.status(statusCodes.OK).json({
 			status: 'success',
