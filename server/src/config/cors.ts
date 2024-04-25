@@ -11,7 +11,7 @@ const corsAllowedHeadersList: string[] = ['Content-Type', 'Authorization'];
 const corsOptions: CorsOptions = {
 	origin: corsOrginList,
 	optionsSuccessStatus: 200,
-	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 	allowedHeaders: corsAllowedHeadersList,
 };
 
