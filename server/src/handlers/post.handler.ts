@@ -28,35 +28,28 @@ export const getNewestPosts = catchAsync(
 		};
 		const posts = await db.post.findMany({
 			take: PageLimit,
-			skip: (page ? +page : 1 - 1) * PageLimit,
+			skip: (page ? +page - 1 : 0) * PageLimit,
 			orderBy: {
 				createdAt: 'desc',
 			},
 			where: {
-				title: {
-					contains: search,
-				},
+				title: search
+					? {
+							contains: search,
+						}
+					: undefined,
 				archived: false,
-				jobType,
-				experienceLevel,
+				jobType: jobType ? jobType : undefined,
+				experienceLevel: experienceLevel ? experienceLevel : undefined,
 			},
-			// include: {
-			// 	comments: true,
-			// 	favByUsers: true,
-			// },
 		});
 		// pagination data
 		const totalPosts = await db.post.count({
 			where: {
-				title: {
-					contains: search,
-				},
 				archived: false,
-				jobType,
-				experienceLevel,
 			},
 		});
-		const totalPages = Math.ceil(totalPosts / PageLimit);
+		const totalPages = Math.ceil(+totalPosts / PageLimit);
 
 		response(
 			res,
@@ -74,14 +67,8 @@ export const makePost = catchAsync(
 		const { file } = req;
 		if (!file)
 			return next(new Panic('no file uploaded', statusCodes.BAD_REQUEST));
-		const {
-			title,
-			description,
-			jobType,
-			experienceLevel,
-
-			authorId,
-		}: Post = req.body;
+		const { title, description, jobType, experienceLevel, authorId }: Post =
+			req.body;
 		const newPost = await db.post.create({
 			data: {
 				title,
@@ -152,7 +139,7 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 	const { page }: { page: string } = req.query as { page: string };
 	const posts = await db.post.findMany({
 		take: PageLimit,
-		skip: (page ? +page : 1 - 1) * PageLimit,
+		skip: (page ? +page - 1 : 0) * PageLimit,
 		orderBy: {
 			createdAt: 'desc',
 		},
@@ -209,7 +196,7 @@ export const getArchivedPosts = catchAsync(
 		const { page }: { page: string } = req.query as { page: string };
 		const posts = await db.post.findMany({
 			take: PageLimit,
-			skip: (page ? +page : 1 - 1) * PageLimit,
+			skip: (page ? +page - 1 : 0) * PageLimit,
 			orderBy: {
 				createdAt: 'desc',
 			},
@@ -330,7 +317,7 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 	const { page }: { page: string } = req.query as { page: string };
 	const posts = await db.post.findMany({
 		take: PageLimit,
-		skip: (page ? +page : 1 - 1) * PageLimit,
+		skip: (page ? +page - 1 : 0) * PageLimit,
 		orderBy: {
 			createdAt: 'desc',
 		},

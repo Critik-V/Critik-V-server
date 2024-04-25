@@ -14,7 +14,7 @@ const router = Router();
 router
 	.route('/')
 	.get(postHandler.getNewestPosts)
-	.post(upload.single('resume'), postHandler.makePost);
+	.post(upload.single('file'), postHandler.makePost);
 
 router.route('/mine').get(postHandler.getMyPosts);
 router.route('/archived').get(postHandler.getArchivedPosts);
