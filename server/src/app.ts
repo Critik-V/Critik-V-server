@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { appSession, passport } from './auth';
 import cors from 'cors';
 import { corsOption } from './config';
+import { statusCodes } from './utils';
 // -------------------- CONFIG -------------------- //
 const app: Application = express();
 // -------------------- MIDDLEWARES -------------------- //
@@ -25,17 +26,32 @@ app.get(
 app.get(
 	'/auth/google/callback',
 	passport.authenticate('google', {
-		successRedirect: '/',
-		failureRedirect: '/failure',
+		successRedirect: process.env.CLIENT_ORIGIN + '/',
+		failureRedirect: process.env.CLIENT_ORIGIN + '/login',
 	})
 );
-app.get('/failure', (req, res) => {
-	res.status(401).json({ message: 'failed to authenticate' });
+
+app.get('/is-authenticated', (req, res) => {
+	if (req.isAuthenticated()) {
+		return res.status(statusCodes.OK).json({ isAuth: true });
+	}
+	return res.status(statusCodes.UNAUTHORIZED).json({ isAuth: false });
 });
 
 app.get('/logout', (req, res) => {
 	req.logout(() => {});
 	res.status(200).json({ message: 'logged out' });
 });
+
+// route to get current user info
+app.get('/user', (req, res) => {
+	if (req.isAuthenticated()) {
+		console.log('User authenticated');
+		return res.status(200).json(req.user);
+	}
+	console.log('User not authenticated');
+	return res.status(401).json({ message: 'User not authenticated' });
+});
+
 // -------------------- EXPORTS -------------------- //
 export default app;

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { postHandler } from '../handlers';
-// import { isAuthenticated } from '../auth';
+import { isAuthenticated } from '../auth';
 
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -9,7 +9,7 @@ const upload = multer({
 
 const router = Router();
 
-// router.use(isAuthenticated);
+router.use(isAuthenticated);
 
 router
 	.route('/')
