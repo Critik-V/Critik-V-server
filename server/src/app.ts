@@ -40,6 +40,7 @@ app.get('/is-authenticated', (req, res) => {
 
 app.get('/logout', (req, res) => {
 	req.logout(() => {});
+	res.clearCookie('connect.sid');
 	res.status(200).json({ message: 'logged out' });
 });
 

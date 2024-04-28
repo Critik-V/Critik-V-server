@@ -26,11 +26,11 @@ export const updateUser = catchAsync(
 			linkedinLink,
 			githubLink,
 			otherLink,
-			id,
-			oauthId,
 			language,
 			theme,
 		}: User = req.body;
+
+		const { id } = req.user as User;
 
 		linkedinLink && !linkedinPattern.test(linkedinLink)
 			? next(new Panic('invalid linkedin link', statusCodes.BAD_REQUEST))
@@ -45,7 +45,6 @@ export const updateUser = catchAsync(
 		const updatedUser = await db.user.update({
 			where: {
 				id,
-				oauthId,
 			},
 			data: {
 				description,
