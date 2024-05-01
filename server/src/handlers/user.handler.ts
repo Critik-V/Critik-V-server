@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import { catchAsync, response, statusCodes } from '../utils';
+import {
+	catchAsync,
+	githubPattern,
+	linkedinPattern,
+	otherPattern,
+	response,
+	statusCodes,
+} from '../utils';
 import { db } from '../config';
 import { User } from '@prisma/client';
 import { Panic } from '../errors';
-
-const linkedinPattern = /^https:\/\/www\.linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
-const githubPattern = /^https:\/\/github\.com\/[a-zA-Z0-9_-]+\/?$/;
-const otherPattern = /^https?:\/\/[a-zA-Z0-9_-]+\/?$/;
 
 export const createUser = catchAsync(async (req: Request, res: Response) => {
 	const { oauthId, fullname }: User = req.body;
