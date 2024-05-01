@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { commentHandler } from '../handlers';
+import { isAuthenticated } from '../auth';
 
 const router = Router();
+
+router.use(isAuthenticated);
 
 router
 	.route('/')
