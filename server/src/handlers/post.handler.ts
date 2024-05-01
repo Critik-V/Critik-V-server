@@ -170,6 +170,15 @@ export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 			id,
 			archived: false,
 		},
+		include: {
+			author: {
+				select: {
+					githubLink: true,
+					linkedinLink: true,
+					otherLink: true,
+				},
+			},
+		},
 	});
 	response(res, statusCodes.OK, 'post fetched succesfully', post || {});
 });

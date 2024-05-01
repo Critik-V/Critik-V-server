@@ -4,7 +4,9 @@ import { Comment } from '@prisma/client';
 import { db } from '../config';
 
 export const createComment = catchAsync(async (req: Request, res: Response) => {
-	const { postId, authorId, content }: Comment = req.body;
+	const { postId, content }: Comment = req.body;
+	const { id: authorId } = req.user as Comment;
+
 	const newComment = await db.comment.create({
 		data: {
 			postId,
@@ -17,7 +19,9 @@ export const createComment = catchAsync(async (req: Request, res: Response) => {
 
 export const updateComment = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const { authorId, content }: Comment = req.body;
+	const { content }: Comment = req.body;
+	const { id: authorId } = req.user as Comment;
+
 	const updatedComment = await db.comment.update({
 		where: {
 			id,
@@ -32,7 +36,8 @@ export const updateComment = catchAsync(async (req: Request, res: Response) => {
 
 export const deleteComment = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const { authorId }: Comment = req.body;
+	const { id: authorId } = req.user as Comment;
+
 	await db.comment.delete({
 		where: {
 			id,
@@ -54,7 +59,6 @@ export const getPostComments = catchAsync(
 			include: {
 				upLikes: true,
 				downLikes: true,
-				author: true,
 			},
 		});
 		response(res, statusCodes.OK, 'comments fetched succesfully', comments);
@@ -68,7 +72,8 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 	}
 	const { id }: { id: string } = req.params as { id: string };
 	const { action } = req.query as { action: likeAction };
-	const { userId }: { userId: string } = req.body;
+	const { id: userId } = req.user as Comment;
+
 	await db.comment.update({
 		where: {
 			id,
@@ -103,7 +108,8 @@ export const downlikeComment = catchAsync(
 		}
 		const { id }: { id: string } = req.params as { id: string };
 		const { action } = req.query as { action: likeAction };
-		const { userId }: { userId: string } = req.body;
+		const { id: userId } = req.user as Comment;
+
 		await db.comment.update({
 			where: {
 				id,
