@@ -165,7 +165,7 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 // GET ONE POST
 export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const post = await db.post.findFirst({
+	const post = await db.post.findUnique({
 		where: {
 			id,
 			archived: false,

@@ -6,6 +6,7 @@ import { appSession, passport } from './auth';
 import cors from 'cors';
 import { corsOption } from './config';
 import { statusCodes } from './utils';
+import { User } from '@prisma/client';
 // -------------------- CONFIG -------------------- //
 const app: Application = express();
 // -------------------- MIDDLEWARES -------------------- //
@@ -48,6 +49,9 @@ app.get('/logout', (req, res) => {
 app.get('/user', (req, res) => {
 	if (req.isAuthenticated()) {
 		console.log('User authenticated');
+		const user = req.user as User;
+		user.id = '';
+		user.oauthId = '';
 		return res.status(200).json(req.user);
 	}
 	console.log('User not authenticated');

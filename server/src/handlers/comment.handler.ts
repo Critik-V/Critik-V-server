@@ -53,6 +53,9 @@ export const getPostComments = catchAsync(
 			postId: string;
 		};
 		const comments = await db.comment.findMany({
+			orderBy: {
+				createdAt: 'desc',
+			},
 			where: {
 				postId,
 			},
