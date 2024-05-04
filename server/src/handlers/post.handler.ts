@@ -214,7 +214,7 @@ export const getArchivedPosts = catchAsync(
 	}
 );
 
-// GET ONE ARCHIVED POST
+// GET ONE ARCHIVED POST | [must be deleted]
 export const getOneArchivedPost = catchAsync(
 	async (req: Request, res: Response) => {
 		const { id }: { id: string } = req.params as { id: string };
@@ -341,4 +341,25 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 		posts,
 		totalPages
 	);
+});
+
+// GET POST IS FAV BY USER
+export const isFavPost = catchAsync(async (req: Request, res: Response) => {
+	const { id }: { id: string } = req.params as { id: string };
+	const { id: userId } = req.user as { id: string };
+	const isFav = await db.post.findFirst({
+		where: {
+			id,
+			favByUsers: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+	});
+	res.status(statusCodes.OK).json({
+		status: 'success',
+		message: 'is fav post fetched succesfully',
+		data: isFav ? true : false,
+	});
 });

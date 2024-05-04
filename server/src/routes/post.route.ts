@@ -19,6 +19,7 @@ router
 router.route('/mine').get(postHandler.getMyPosts);
 router.route('/archived').get(postHandler.getArchivedPosts);
 router.route('/fav').post(postHandler.favPost).get(postHandler.getFavPosts);
+router.route('/isFav/:id').get(postHandler.isFavPost);
 
 router
 	.route('/:id')
