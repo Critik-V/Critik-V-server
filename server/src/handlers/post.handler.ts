@@ -168,7 +168,7 @@ export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 	const post = await db.post.findUnique({
 		where: {
 			id,
-			archived: false,
+			// archived: false,
 		},
 		include: {
 			author: {
