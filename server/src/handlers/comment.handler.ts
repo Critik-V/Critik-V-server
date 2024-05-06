@@ -77,29 +77,57 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 	const { action } = req.query as { action: likeAction };
 	const { id: userId } = req.user as Comment;
 
+	const [hasDownLiked, hasUpLiked] = await Promise.all([
+		db.comment.findFirst({
+			where: {
+				id,
+				downLikes: {
+					some: {
+						id: userId,
+					},
+				},
+			},
+		}),
+		db.comment.findFirst({
+			where: {
+				id,
+				upLikes: {
+					some: {
+						id: userId,
+					},
+				},
+			},
+		}),
+	]);
+
+	const data =
+		!hasUpLiked && action === likeAction.TRUE
+			? {
+					upLikes: {
+						connect: {
+							id: userId,
+						},
+					},
+					totalUpLikes: { increment: 1 },
+					downLikes: hasDownLiked ? { disconnect: { id: userId } } : {},
+					totalDownLikes: hasDownLiked ? { decrement: 1 } : {},
+				}
+			: {
+					upLikes: {
+						disconnect: {
+							id: userId,
+						},
+					},
+					totalUpLikes: { decrement: 1 },
+				};
+
 	await db.comment.update({
 		where: {
 			id,
 		},
-		data:
-			action === likeAction.TRUE
-				? {
-						upLikes: {
-							connect: {
-								id: userId,
-							},
-						},
-						totalUpLikes: { increment: 1 },
-					}
-				: {
-						upLikes: {
-							disconnect: {
-								id: userId,
-							},
-						},
-						totalUpLikes: { decrement: 1 },
-					},
+		data,
 	});
+
 	response(res, statusCodes.OK, 'comment liked succesfully', undefined);
 });
 
@@ -113,28 +141,55 @@ export const downlikeComment = catchAsync(
 		const { action } = req.query as { action: likeAction };
 		const { id: userId } = req.user as Comment;
 
+		const [hasDownLiked, hasUpLiked] = await Promise.all([
+			db.comment.findFirst({
+				where: {
+					id,
+					downLikes: {
+						some: {
+							id: userId,
+						},
+					},
+				},
+			}),
+			db.comment.findFirst({
+				where: {
+					id,
+					upLikes: {
+						some: {
+							id: userId,
+						},
+					},
+				},
+			}),
+		]);
+
+		const data =
+			!hasDownLiked && action === likeAction.TRUE
+				? {
+						downLikes: {
+							connect: {
+								id: userId,
+							},
+						},
+						totalDownLikes: { increment: 1 },
+						upLikes: hasUpLiked ? { disconnect: { id: userId } } : {},
+						totalUpLikes: hasUpLiked ? { decrement: 1 } : {},
+					}
+				: {
+						downLikes: {
+							disconnect: {
+								id: userId,
+							},
+						},
+						totalDownLikes: { decrement: 1 },
+					};
+
 		await db.comment.update({
 			where: {
 				id,
 			},
-			data:
-				action === likeAction.TRUE
-					? {
-							downLikes: {
-								connect: {
-									id: userId,
-								},
-							},
-							totalDownLikes: { increment: 1 },
-						}
-					: {
-							downLikes: {
-								disconnect: {
-									id: userId,
-								},
-							},
-							totalDownLikes: { decrement: 1 },
-						},
+			data,
 		});
 		response(res, statusCodes.OK, 'comment disliked succesfully', undefined);
 	}
