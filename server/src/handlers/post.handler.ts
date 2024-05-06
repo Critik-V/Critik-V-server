@@ -168,7 +168,6 @@ export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 	const post = await db.post.findUnique({
 		where: {
 			id,
-			// archived: false,
 		},
 		include: {
 			author: {
@@ -295,7 +294,7 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 
 	let updatedUser: Post;
 
-	if (hasFav && action === favPostAction.ADD) {
+	if (!hasFav && action === favPostAction.ADD) {
 		updatedUser = await db.post.update({
 			where: {
 				id,
@@ -305,7 +304,7 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 				totalFav: { increment: 1 },
 			},
 		});
-	} else if (!hasFav && action === favPostAction.REMOVE) {
+	} else if (hasFav && action === favPostAction.REMOVE) {
 		updatedUser = await db.post.update({
 			where: {
 				id,
@@ -316,7 +315,10 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 			},
 		});
 	} else {
-		throw new Panic('Invalid action or post not found', statusCodes.BAD_REQUEST);
+		throw new Panic(
+			'Invalid action or post not found',
+			statusCodes.BAD_REQUEST
+		);
 	}
 
 	response(res, statusCodes.OK, 'resume saved succesfully', updatedUser);

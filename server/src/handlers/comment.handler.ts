@@ -49,8 +49,8 @@ export const deleteComment = catchAsync(async (req: Request, res: Response) => {
 
 export const getPostComments = catchAsync(
 	async (req: Request, res: Response) => {
-		const { postId }: { postId: string } = req.body as {
-			postId: string;
+		const { id: postId }: { id: string } = req.params as {
+			id: string;
 		};
 		const comments = await db.comment.findMany({
 			orderBy: {
@@ -69,12 +69,7 @@ export const getPostComments = catchAsync(
 );
 
 export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
-	enum likeAction {
-		TRUE = 'true',
-		FALSE = 'false',
-	}
 	const { id }: { id: string } = req.params as { id: string };
-	const { action } = req.query as { action: likeAction };
 	const { id: userId } = req.user as Comment;
 
 	const [hasDownLiked, hasUpLiked] = await Promise.all([
@@ -100,26 +95,25 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 		}),
 	]);
 
-	const data =
-		!hasUpLiked && action === likeAction.TRUE
-			? {
-					upLikes: {
-						connect: {
-							id: userId,
-						},
+	const data = !hasUpLiked
+		? {
+				upLikes: {
+					connect: {
+						id: userId,
 					},
-					totalUpLikes: { increment: 1 },
-					downLikes: hasDownLiked ? { disconnect: { id: userId } } : {},
-					totalDownLikes: hasDownLiked ? { decrement: 1 } : {},
-				}
-			: {
-					upLikes: {
-						disconnect: {
-							id: userId,
-						},
+				},
+				totalUpLikes: { increment: 1 },
+				downLikes: hasDownLiked ? { disconnect: { id: userId } } : undefined,
+				totalDownLikes: hasDownLiked ? { decrement: 1 } : undefined,
+			}
+		: {
+				upLikes: {
+					disconnect: {
+						id: userId,
 					},
-					totalUpLikes: { decrement: 1 },
-				};
+				},
+				totalUpLikes: { decrement: 1 },
+			};
 
 	await db.comment.update({
 		where: {
@@ -133,12 +127,7 @@ export const uplikeComment = catchAsync(async (req: Request, res: Response) => {
 
 export const downlikeComment = catchAsync(
 	async (req: Request, res: Response) => {
-		enum likeAction {
-			TRUE = 'true',
-			FALSE = 'false',
-		}
 		const { id }: { id: string } = req.params as { id: string };
-		const { action } = req.query as { action: likeAction };
 		const { id: userId } = req.user as Comment;
 
 		const [hasDownLiked, hasUpLiked] = await Promise.all([
@@ -164,26 +153,25 @@ export const downlikeComment = catchAsync(
 			}),
 		]);
 
-		const data =
-			!hasDownLiked && action === likeAction.TRUE
-				? {
-						downLikes: {
-							connect: {
-								id: userId,
-							},
+		const data = !hasDownLiked
+			? {
+					downLikes: {
+						connect: {
+							id: userId,
 						},
-						totalDownLikes: { increment: 1 },
-						upLikes: hasUpLiked ? { disconnect: { id: userId } } : {},
-						totalUpLikes: hasUpLiked ? { decrement: 1 } : {},
-					}
-				: {
-						downLikes: {
-							disconnect: {
-								id: userId,
-							},
+					},
+					totalDownLikes: { increment: 1 },
+					upLikes: hasUpLiked ? { disconnect: { id: userId } } : undefined,
+					totalUpLikes: hasUpLiked ? { decrement: 1 } : undefined,
+				}
+			: {
+					downLikes: {
+						disconnect: {
+							id: userId,
 						},
-						totalDownLikes: { decrement: 1 },
-					};
+					},
+					totalDownLikes: { decrement: 1 },
+				};
 
 		await db.comment.update({
 			where: {
