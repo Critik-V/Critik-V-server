@@ -281,23 +281,44 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: Post = req.body;
 	const { id: userId } = req.user as { id: string };
 	const { action } = req.query as { action: favPostAction };
-	const updatedUser = await db.post.update({
+
+	const hasFav = await db.post.findFirst({
 		where: {
 			id,
+			favByUsers: {
+				some: {
+					id: userId,
+				},
+			},
 		},
-		data:
-			action === favPostAction.ADD
-				? {
-						favByUsers: { connect: { id: userId } },
-						totalFav: { increment: 1 },
-					}
-				: action === favPostAction.REMOVE
-					? {
-							favByUsers: { disconnect: { id: userId } },
-							totalFav: { decrement: 1 },
-						}
-					: {},
 	});
+
+	let updatedUser: Post;
+
+	if (hasFav && action === favPostAction.ADD) {
+		updatedUser = await db.post.update({
+			where: {
+				id,
+			},
+			data: {
+				favByUsers: { connect: { id: userId } },
+				totalFav: { increment: 1 },
+			},
+		});
+	} else if (!hasFav && action === favPostAction.REMOVE) {
+		updatedUser = await db.post.update({
+			where: {
+				id,
+			},
+			data: {
+				favByUsers: { disconnect: { id: userId } },
+				totalFav: { decrement: 1 },
+			},
+		});
+	} else {
+		throw new Panic('Invalid action or post not found', statusCodes.BAD_REQUEST);
+	}
+
 	response(res, statusCodes.OK, 'resume saved succesfully', updatedUser);
 });
 
