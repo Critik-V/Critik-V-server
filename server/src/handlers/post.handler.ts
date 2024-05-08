@@ -36,6 +36,7 @@ export const getNewestPosts = catchAsync(
 				title: search
 					? {
 							contains: search,
+							mode: 'insensitive',
 						}
 					: undefined,
 				archived: false,
