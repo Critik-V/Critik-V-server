@@ -5,8 +5,9 @@ import helmet from 'helmet';
 import { appSession, passport } from './auth';
 import cors from 'cors';
 import { corsOption } from './config';
-import { statusCodes } from './utils';
+import { apiRoutePrefix, statusCodes } from './utils';
 import { User } from '@prisma/client';
+import path from 'node:path';
 // -------------------- CONFIG -------------------- //
 const app: Application = express();
 // -------------------- MIDDLEWARES -------------------- //
@@ -15,6 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(process.env.ENV === 'production' ? 'combined' : 'dev'));
 app.use(helmet());
+// -------------------- FILES -------------------- //
+app.use(apiRoutePrefix("resumes"), express.static(path.join(__dirname, '../resumes/images')));
 // -------------------- GOOGLE AUTH -------------------- //
 app.use(appSession);
 app.use(passport.initialize());
