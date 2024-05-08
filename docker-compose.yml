@@ -39,3 +39,5 @@ services:
 volumes:
   db_critik_data:
     driver: local
+  resumes_images:
+    driver: local
