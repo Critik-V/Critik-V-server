@@ -328,7 +328,22 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 // GET FAV POSTS
 export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 	const { id: userId } = req.user as { id: string };
-	const { page }: { page: string } = req.query as { page: string };
+	const {
+		jobType,
+		experienceLevel,
+		search,
+		page,
+	}: {
+		jobType: JobType;
+		experienceLevel: ExprerienceLevel;
+		search: string;
+		page: string;
+	} = req.query as {
+		page: string;
+		jobType: JobType;
+		experienceLevel: ExprerienceLevel;
+		search: string;
+	};
 	const posts = await db.post.findMany({
 		take: PageLimit,
 		skip: (page ? +page - 1 : 0) * PageLimit,
@@ -341,6 +356,15 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 					id: userId,
 				},
 			},
+			title: search
+				? {
+						contains: search,
+						mode: 'insensitive',
+					}
+				: undefined,
+			archived: false,
+			jobType: jobType ? jobType : undefined,
+			experienceLevel: experienceLevel ? experienceLevel : undefined,
 		},
 		include: {
 			comments: true,
