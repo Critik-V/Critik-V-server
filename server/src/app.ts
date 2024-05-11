@@ -17,7 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan(process.env.ENV === 'production' ? 'combined' : 'dev'));
 app.use(helmet());
 // -------------------- FILES -------------------- //
-app.use(apiRoutePrefix("resumes"), express.static(path.join(__dirname, '../resumes/images')));
+app.use(
+	apiRoutePrefix('resumes'),
+	express.static(path.join(__dirname, '../resumes/images'))
+);
 // -------------------- GOOGLE AUTH -------------------- //
 app.use(appSession);
 app.use(passport.initialize());
