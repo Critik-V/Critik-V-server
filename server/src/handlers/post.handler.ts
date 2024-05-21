@@ -80,8 +80,8 @@ export const makePost = catchAsync(
 			},
 		});
 
-		const filename = `${newPost.id}.pdf`;
-		const destinationDirectory = 'resumes/';
+		const filename: string = `${newPost.id}.pdf`;
+		const destinationDirectory: string = 'resumes/';
 
 		if (!fs.existsSync(destinationDirectory)) {
 			fs.mkdirSync(destinationDirectory);
@@ -89,6 +89,31 @@ export const makePost = catchAsync(
 
 		if (file) {
 			fs.writeFileSync(destinationDirectory + filename, file.buffer);
+		}
+
+		const pdfToImg = await fetch(`${process.env.PDF_CONVERTER_URL}`, {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify({
+				filename,
+			}),
+		});
+
+		const conversionRes: {
+			status: string;
+			message: string;
+		} = await pdfToImg.json();
+
+		console.log(conversionRes);
+
+		if (conversionRes.status !== 'success') {
+			await db.post.delete({
+				where: {
+					id: newPost.id,
+				},
+			});
+			fs.unlinkSync(destinationDirectory + filename);
+			throw new Panic('pdf converter failed', statusCodes.BAD_REQUEST);
 		}
 
 		response(res, statusCodes.CREATED, 'post created succesfully', newPost);
