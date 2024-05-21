@@ -7,7 +7,7 @@ passport.serializeUser((user, done) => {
 	done(null, user);
 });
 passport.deserializeUser(async (obj: { id: string }, done) => {
-	const user = await db.user.findUnique({ where: { id: obj.id } });
+	const user = await db.user.findUnique({ where: { oauthId: obj.id } });
 	done(null, user);
 });
 

@@ -16,7 +16,7 @@ RUN pnpm install
 # copy the necessary files in the container
 COPY . .
 
-# generate the prism client
+# generate the prisma client
 RUN pnpm run generate
 
 # running the compilation

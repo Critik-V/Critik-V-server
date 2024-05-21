@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import { catchAsync, response, statusCodes } from '../utils';
+import {
+	catchAsync,
+	githubPattern,
+	linkedinPattern,
+	otherPattern,
+	response,
+	statusCodes,
+} from '../utils';
 import { db } from '../config';
 import { User } from '@prisma/client';
 import { Panic } from '../errors';
-
-const linkedinPattern = /^https:\/\/www\.linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
-const githubPattern = /^https:\/\/github\.com\/[a-zA-Z0-9_-]+\/?$/;
 
 export const createUser = catchAsync(async (req: Request, res: Response) => {
 	const { oauthId, fullname }: User = req.body;
@@ -24,11 +28,12 @@ export const updateUser = catchAsync(
 			description,
 			linkedinLink,
 			githubLink,
-			id,
-			oauthId,
+			otherLink,
 			language,
 			theme,
 		}: User = req.body;
+
+		const { id } = req.user as User;
 
 		linkedinLink && !linkedinPattern.test(linkedinLink)
 			? next(new Panic('invalid linkedin link', statusCodes.BAD_REQUEST))
@@ -36,11 +41,13 @@ export const updateUser = catchAsync(
 		githubLink && !githubPattern.test(githubLink)
 			? next(new Panic('invalid github link', statusCodes.BAD_REQUEST))
 			: null;
+		otherLink && !otherPattern.test(otherLink)
+			? next(new Panic('invalid other link', statusCodes.BAD_REQUEST))
+			: null;
 
 		const updatedUser = await db.user.update({
 			where: {
 				id,
-				oauthId,
 			},
 			data: {
 				description,
@@ -48,6 +55,7 @@ export const updateUser = catchAsync(
 				githubLink,
 				language,
 				theme,
+				otherLink,
 			},
 		});
 		response(res, statusCodes.OK, 'user updated succesfully', updatedUser);

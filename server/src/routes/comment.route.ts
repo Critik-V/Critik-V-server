@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { commentHandler } from '../handlers';
+import { isAuthenticated } from '../auth';
 
 const router = Router();
 
-router
-	.route('/')
-	.get(commentHandler.getPostComments)
-	.post(commentHandler.createComment);
+router.use(isAuthenticated);
 
+router.route('/').post(commentHandler.createComment);
+router.route('/post/:id').get(commentHandler.getPostComments);
 
 router
 	.route('/:id')

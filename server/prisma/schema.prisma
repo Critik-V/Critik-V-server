@@ -23,10 +23,12 @@ enum theme {
 model User {
   id                String         @id @default(uuid())
   oauthId           String         @unique
+  profilePic       String?
   fullname          String
   description       String?
   linkedinLink      String?
   githubLink        String?
+  otherLink         String?
   myPosts           Post[]
   favPosts          Post[]         @relation("PostFavorites")
   comments          Comment[]

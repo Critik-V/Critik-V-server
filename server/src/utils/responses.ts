@@ -24,7 +24,7 @@ const response = (
 		message,
 		statusCode,
 		status: 'success',
-		length: data ? (Array.isArray(data) ? data.length : length) : 0,
+		length: Array.isArray(data) ? data.length : 0,
 		data,
 	});
 };

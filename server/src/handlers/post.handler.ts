@@ -36,6 +36,7 @@ export const getNewestPosts = catchAsync(
 				title: search
 					? {
 							contains: search,
+							mode: 'insensitive',
 						}
 					: undefined,
 				archived: false,
@@ -67,8 +68,8 @@ export const makePost = catchAsync(
 		const { file } = req;
 		if (!file)
 			return next(new Panic('no file uploaded', statusCodes.BAD_REQUEST));
-		const { title, description, jobType, experienceLevel, authorId }: Post =
-			req.body;
+		const { title, description, jobType, experienceLevel }: Post = req.body;
+		const { id: authorId } = req.user as Post;
 		const newPost = await db.post.create({
 			data: {
 				title,
@@ -79,8 +80,8 @@ export const makePost = catchAsync(
 			},
 		});
 
-		const filename = `${newPost.id}.pdf`;
-		const destinationDirectory = 'resumes/';
+		const filename: string = `${newPost.id}.pdf`;
+		const destinationDirectory: string = 'resumes/';
 
 		if (!fs.existsSync(destinationDirectory)) {
 			fs.mkdirSync(destinationDirectory);
@@ -90,6 +91,31 @@ export const makePost = catchAsync(
 			fs.writeFileSync(destinationDirectory + filename, file.buffer);
 		}
 
+		const pdfToImg = await fetch(`${process.env.PDF_CONVERTER_URL}`, {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify({
+				filename,
+			}),
+		});
+
+		const conversionRes: {
+			status: string;
+			message: string;
+		} = await pdfToImg.json();
+
+		console.log(conversionRes);
+
+		if (conversionRes.status !== 'success') {
+			await db.post.delete({
+				where: {
+					id: newPost.id,
+				},
+			});
+			fs.unlinkSync(destinationDirectory + filename);
+			throw new Panic('pdf converter failed', statusCodes.BAD_REQUEST);
+		}
+
 		response(res, statusCodes.CREATED, 'post created succesfully', newPost);
 	}
 );
@@ -97,12 +123,12 @@ export const makePost = catchAsync(
 // MODIFY POST
 export const updatePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const { authorId, title, description, jobType, experienceLevel }: Post =
-		req.body;
+	const { title, description, jobType, experienceLevel }: Post = req.body;
+	const { id: authorId } = req.user as Post;
 	const post = await db.post.update({
 		where: {
-			id: id,
-			authorId: authorId,
+			id,
+			authorId,
 		},
 		data: {
 			title,
@@ -120,11 +146,11 @@ export const deletePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as {
 		id: string;
 	};
-	const { authorId }: Post = req.body;
+	const { id: authorId } = req.user as Post;
 	await db.post.delete({
 		where: {
-			id: id,
-			authorId: authorId,
+			id,
+			authorId,
 		},
 	});
 	res.status(statusCodes.OK).json({
@@ -135,7 +161,7 @@ export const deletePost = catchAsync(async (req: Request, res: Response) => {
 
 // GET USER POSTS
 export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
-	const { authorId }: Post = req.body;
+	const { id: authorId } = req.user as Post;
 	const { page }: { page: string } = req.query as { page: string };
 	const posts = await db.post.findMany({
 		take: PageLimit,
@@ -147,13 +173,6 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 			authorId,
 			archived: false,
 		},
-		// include: {
-		// 	favByUsers: {
-		// 		select: {
-		// 			id: true,
-		// 		},
-		// 	},
-		// },
 	});
 	// pagination data
 	const totalPosts = await db.post.count({
@@ -172,27 +191,27 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 // GET ONE POST
 export const getOnePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const post = await db.post.findFirst({
+	const post = await db.post.findUnique({
 		where: {
-			id: id,
-			archived: false,
+			id,
 		},
-		// include: {
-		// 	comments: true,
-		// 	favByUsers: true,
-		// },
+		include: {
+			author: {
+				select: {
+					githubLink: true,
+					linkedinLink: true,
+					otherLink: true,
+				},
+			},
+		},
 	});
-	res.status(statusCodes.OK).json({
-		status: 'success',
-		message: 'post fetched succesfully',
-		data: post,
-	});
+	response(res, statusCodes.OK, 'post fetched succesfully', post || {});
 });
 
 // GET ARCHIVED POSTS
 export const getArchivedPosts = catchAsync(
 	async (req: Request, res: Response) => {
-		const { authorId }: Post = req.body;
+		const { id: authorId } = req.user as Post;
 		const { page }: { page: string } = req.query as { page: string };
 		const posts = await db.post.findMany({
 			take: PageLimit,
@@ -220,21 +239,17 @@ export const getArchivedPosts = catchAsync(
 	}
 );
 
-// GET ONE ARCHIVED POST
+// GET ONE ARCHIVED POST | [must be deleted]
 export const getOneArchivedPost = catchAsync(
 	async (req: Request, res: Response) => {
 		const { id }: { id: string } = req.params as { id: string };
-		const { authorId }: Post = req.body;
+		const { id: authorId }: Post = req.user as Post;
 		const post = await db.post.findUnique({
 			where: {
 				id,
 				authorId,
 				archived: true,
 			},
-			// include: {
-			// 	comments: true,
-			// 	favByUsers: true,
-			// },
 		});
 		res.status(statusCodes.OK).json({
 			status: 'success',
@@ -247,7 +262,7 @@ export const getOneArchivedPost = catchAsync(
 // ARCHIVE POST
 export const archivePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const { authorId }: Post = req.body;
+	const { id: authorId }: Post = req.user as Post;
 	await db.post.update({
 		where: {
 			id,
@@ -266,7 +281,7 @@ export const archivePost = catchAsync(async (req: Request, res: Response) => {
 // UNARCHIVE POST
 export const unarchivePost = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };
-	const { authorId }: Post = req.body;
+	const { id: authorId }: Post = req.user as Post;
 	await db.post.update({
 		where: {
 			id,
@@ -289,32 +304,71 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 		REMOVE = 'remove',
 	}
 	const { id }: Post = req.body;
-	const { userId } = req.body as { userId: string };
+	const { id: userId } = req.user as { id: string };
 	const { action } = req.query as { action: favPostAction };
-	const updatedUser = await db.post.update({
+
+	const hasFav = await db.post.findFirst({
 		where: {
 			id,
+			favByUsers: {
+				some: {
+					id: userId,
+				},
+			},
 		},
-		data:
-			action === favPostAction.ADD
-				? {
-						favByUsers: { connect: { id: userId } },
-						totalFav: { increment: 1 },
-					}
-				: action === favPostAction.REMOVE
-					? {
-							favByUsers: { disconnect: { id: userId } },
-							totalFav: { decrement: 1 },
-						}
-					: {},
 	});
+
+	let updatedUser: Post;
+
+	if (!hasFav && action === favPostAction.ADD) {
+		updatedUser = await db.post.update({
+			where: {
+				id,
+			},
+			data: {
+				favByUsers: { connect: { id: userId } },
+				totalFav: { increment: 1 },
+			},
+		});
+	} else if (hasFav && action === favPostAction.REMOVE) {
+		updatedUser = await db.post.update({
+			where: {
+				id,
+			},
+			data: {
+				favByUsers: { disconnect: { id: userId } },
+				totalFav: { decrement: 1 },
+			},
+		});
+	} else {
+		throw new Panic(
+			'Invalid action or post not found',
+			statusCodes.BAD_REQUEST
+		);
+	}
+
 	response(res, statusCodes.OK, 'resume saved succesfully', updatedUser);
 });
 
 // GET FAV POSTS
 export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
-	const { userId }: { userId: string } = req.body;
-	const { page }: { page: string } = req.query as { page: string };
+	const { id: userId } = req.user as { id: string };
+	const {
+		jobType,
+		experienceLevel,
+		search,
+		page,
+	}: {
+		jobType: JobType;
+		experienceLevel: ExprerienceLevel;
+		search: string;
+		page: string;
+	} = req.query as {
+		page: string;
+		jobType: JobType;
+		experienceLevel: ExprerienceLevel;
+		search: string;
+	};
 	const posts = await db.post.findMany({
 		take: PageLimit,
 		skip: (page ? +page - 1 : 0) * PageLimit,
@@ -327,6 +381,15 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 					id: userId,
 				},
 			},
+			title: search
+				? {
+						contains: search,
+						mode: 'insensitive',
+					}
+				: undefined,
+			archived: false,
+			jobType: jobType ? jobType : undefined,
+			experienceLevel: experienceLevel ? experienceLevel : undefined,
 		},
 		include: {
 			comments: true,
@@ -351,4 +414,25 @@ export const getFavPosts = catchAsync(async (req: Request, res: Response) => {
 		posts,
 		totalPages
 	);
+});
+
+// GET POST IS FAV BY USER
+export const isFavPost = catchAsync(async (req: Request, res: Response) => {
+	const { id }: { id: string } = req.params as { id: string };
+	const { id: userId } = req.user as { id: string };
+	const isFav = await db.post.findFirst({
+		where: {
+			id,
+			favByUsers: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+	});
+	res.status(statusCodes.OK).json({
+		status: 'success',
+		message: 'is fav post fetched succesfully',
+		data: isFav ? true : false,
+	});
 });

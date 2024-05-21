@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { postHandler } from '../handlers';
-// import { isAuthenticated } from '../auth';
+import { isAuthenticated } from '../auth';
 
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -9,7 +9,7 @@ const upload = multer({
 
 const router = Router();
 
-// router.use(isAuthenticated);
+router.use(isAuthenticated);
 
 router
 	.route('/')
@@ -19,11 +19,14 @@ router
 router.route('/mine').get(postHandler.getMyPosts);
 router.route('/archived').get(postHandler.getArchivedPosts);
 router.route('/fav').post(postHandler.favPost).get(postHandler.getFavPosts);
+router.route('/isFav/:id').get(postHandler.isFavPost);
+
 router
 	.route('/:id')
 	.get(postHandler.getOnePost)
 	.patch(postHandler.updatePost)
 	.delete(postHandler.deletePost);
+
 router
 	.route('/archive/:id')
 	.patch(postHandler.archivePost)

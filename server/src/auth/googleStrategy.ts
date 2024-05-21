@@ -14,6 +14,7 @@ const GoogleStrategy = new Strategy(
 				data: {
 					oauthId: profile.id,
 					fullname: profile.displayName,
+					profilePic: profile.photos?.[0]?.value ?? '',
 				},
 			});
 			return done(null, newUser);
