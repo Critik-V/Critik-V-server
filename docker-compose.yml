@@ -36,9 +36,9 @@ services:
   #     - critik_network
 
 # networking configuration
-networks:
-  critik_network:
-    driver: bridge
+# networks:
+#   critik_network:
+#     driver: bridge
 volumes:
   db_critik_data:
     driver: local
