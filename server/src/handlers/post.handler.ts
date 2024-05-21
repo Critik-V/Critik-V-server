@@ -95,7 +95,7 @@ export const makePost = catchAsync(
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify({
-				filename,
+				filename: newPost.id,
 			}),
 		});
 
@@ -103,8 +103,6 @@ export const makePost = catchAsync(
 			status: string;
 			message: string;
 		} = await pdfToImg.json();
-
-		console.log(conversionRes);
 
 		if (conversionRes.status !== 'success') {
 			await db.post.delete({
