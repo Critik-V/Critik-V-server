@@ -29,15 +29,20 @@ services:
   #   depends_on:
   #     db_critik:
   #       condition: service_healthy
+  #   volumes:
+  #     - resumes_pdf:/app/resumes
+  #     - resumes_images:/app/resumes/images
   #   networks:
   #     - critik_network
 
 # networking configuration
-# networks:
-#   critik_network:
-#     driver: bridge
+networks:
+  critik_network:
+    driver: bridge
 volumes:
   db_critik_data:
     driver: local
   resumes_images:
+    driver: local
+  resumes_pdf:
     driver: local
