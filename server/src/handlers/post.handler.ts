@@ -103,7 +103,7 @@ export const makePost = catchAsync(
 			status: string;
 			message: string;
 		} = await pdfToImg.json();
-
+    
 		if (conversionRes.status !== 'success') {
 			await db.post.delete({
 				where: {
