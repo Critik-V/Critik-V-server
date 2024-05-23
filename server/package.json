@@ -9,7 +9,8 @@
 		"compile": "tsc",
 		"generate": "pnpm prisma generate",
 		"migrate": "pnpm prisma migrate deploy",
-		"start": "pnpm run migrate && node --env-file=.env ./dist/main.js"
+		"start": "pnpm run migrate && node --env-file=.env ./dist/main.js",
+		"test": "pnpm vitest"
 	},
 	"author": "Critik-V Core Team",
 	"license": "ISC",
