@@ -27,12 +27,12 @@
 		"@typescript-eslint/parser": "^6.18.0",
 		"eslint": "^8.56.0",
 		"prettier": "^3.2.4",
-		"prisma": "^5.7.1",
+		"prisma": "^5.14.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.3.3"
 	},
 	"dependencies": {
-		"@prisma/client": "5.7.1",
+		"@prisma/client": "5.14.0",
 		"chalk": "^4.1.2",
 		"cors": "^2.8.5",
 		"express": "^4.18.2",
