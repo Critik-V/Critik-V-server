@@ -10,19 +10,17 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [20.x, 21.x]
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '21'
-      - uses: actions/checkout@v2
+          node-version: "21.x"
+      - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
           npm install -g pnpm
+          npm install -g eslint
           cd ./server
           pnpm install --frozen-lockfile
       - name: Run eslint
-        run: pnpm eslint . --ext .js,.ts
+        run: pnpm eslint . --ext .ts

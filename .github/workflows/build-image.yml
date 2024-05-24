@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21.x'
       - uses: actions/checkout@v3
       - name: Copy .env.example to .env and modify variables
         env:
