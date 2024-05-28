@@ -36,8 +36,8 @@ jobs:
         shell: bash
         run: |
           sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST
-          chmod -R 777 /critik-v
           cd /critik-v
+          chmod -R 777 /critik-v
           git clone https://github.com/${{ github.repository }}
 
           
