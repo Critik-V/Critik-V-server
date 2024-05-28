@@ -16,7 +16,7 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
       - name: Install eslint
-        run: npm install -g eslint
+        run: npm install -g eslint:8.56.0
       - name: Run eslint
         working-directory: ./server
         shell: bash
