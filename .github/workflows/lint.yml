@@ -13,6 +13,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 21
-      - run: npm install -g pnpm
-      - run: npm install -g eslint
-      - run: pnpx eslint --ext .tsx .
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install eslint
+        run: npm install -g eslint
+      - name: Run eslint
+        working-directory: ./server
+        run: pnpm eslint --ext .ts .
