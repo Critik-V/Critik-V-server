@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST
-          cd /
+          cd /tmp
           git clone https://github.com/${{ github.repository }}
 
           
