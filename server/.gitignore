@@ -4,3 +4,4 @@ dist
 resumes
 # Keep environment variables out of version control
 .env
+.github/workflows/build-image.yml
