@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: Critik-V-Server
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
