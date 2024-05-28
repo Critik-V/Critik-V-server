@@ -11,7 +11,7 @@
 		"migrate": "pnpm prisma migrate deploy",
 		"start": "pnpm run migrate && node --env-file=.env ./dist/main.js",
 		"test": "pnpm vitest",
-		"lint": "eslint . --ext .ts"
+		"lint": "pnpm eslint **/*.ts"
 	},
 	"author": "Critik-V Core Team",
 	"license": "ISC",
