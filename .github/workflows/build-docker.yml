@@ -1,4 +1,4 @@
-name: Build Docker image and push on github registry
+name: Push to remote server
 
 on:
   push:
@@ -36,7 +36,8 @@ jobs:
         shell: bash
         run: |
           sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST
-          cd /tmp
+          chmod -R 777 /critik-v
+          cd /critik-v
           git clone https://github.com/${{ github.repository }}
 
           
