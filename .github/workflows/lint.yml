@@ -20,4 +20,4 @@ jobs:
       - name: Run eslint
         working-directory: ./server
         shell: bash
-        run: pnpm eslint --ext .ts .
+        run: pnpm run lint
