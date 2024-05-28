@@ -17,6 +17,9 @@ jobs:
         run: npm install -g pnpm
       - name: Install eslint
         run: npm install -g eslint@8.56.0
+      - name: install dependencies
+        working-directory: ./server
+        run: pnpm install --frozen-lockfile
       - name: Run eslint
         working-directory: ./server
         shell: bash
