@@ -22,41 +22,23 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Copy .env.example to .env and modify variables
-        env:
-          NODE_ENV: production
-          SERVER_PORT: ${{ secrets.SERVER_PORT }}
-          DB_SERVICE: ${{ secrets.DB_SERVICE }}
-          API_NAME: ${{ secrets.API_NAME }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
-          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-          CLIENT_SERVICE: ${{ secrets.CLIENT_SERVICE }}
-          CLIENT_PORT: ${{ secrets.CLIENT_PORT }}
-          PDF_CONVERTER_SERVICE: ${{ secrets.PDF_CONVERTER_SERVICE }}
-          PDF_CONVERTER_PORT: ${{ secrets.PDF_CONVERTER_PORT }}
         shell: bash
         run: cp ./server/.env.example ./server/.env
-          # sed -i "s/NODE_ENV=.*$/NODE_ENV=$NODE_ENV/" ./server/.env
-          # sed -i "s/SERVER_PORT=.*$/SERVER_PORT=$SERVER_PORT/" ./server/.env
-          # sed -i "s/DB_SERVICE=.*$/DB_SERVICE=$DB_SERVICE/" ./server/.env
-          # sed -i "s/API_NAME=.*$/API_NAME=$API_NAME/" ./server/.env
-          # sed -i "s/GOOGLE_CLIENT_ID=.*$/GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID/" ./server/.env
-          # sed -i "s/GOOGLE_CLIENT_SECRET=.*$/GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET/" ./server/.env
-          # sed -i "s/GOOGLE_REDIRECT_URI=.*$/GOOGLE_REDIRECT_URI=$GOOGLE_REDIRECT_URI/" ./server/.env
-          # sed -i "s/SESSION_SECRET=.*$/SESSION_SECRET=$SESSION_SECRET/" ./server/.env
-          # sed -i "s/CLIENT_SERVICE=.*$/CLIENT_SERVICE=$CLIENT_SERVICE/" ./server/.env
-          # sed -i "s/CLIENT_PORT=.*$/CLIENT_PORT=$CLIENT_PORT/" ./server/.env
-          # sed -i "s/PDF_CONVERTER_SERVICE=.*$/PDF_CONVERTER_SERVICE=$PDF_CONVERTER_SERVICE/" ./server/.env
-          # sed -i "s/PDF_CONVERTER_PORT=.*$/PDF_CONVERTER_PORT=$PDF_CONVERTER_PORT/" ./server/.env
 
-      - name: Build & push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v6
-        with:
-          directory: ./server
-          image: ghcr.io/critik-v_server
-          tags: v1, latest
-          registry: ghcr.io
-          dockerfile: ./server/Dockerfile
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+      - name: Install SSH Client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Connect to Server and Execute Commands
+        env:
+          SSH_USERNAME: root
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        shell: bash
+        run: |
+          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST
+          cd /critik-v/
+          git clone https://github.com/${{ github.repository }}
+          mv ${{ github.repository }} critik-v_server
+
+
+          
