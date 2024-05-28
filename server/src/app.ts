@@ -27,7 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get(
-	'/login',
+	apiRoutePrefix('login'),
 	passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 app.get(
@@ -38,21 +38,21 @@ app.get(
 	})
 );
 
-app.get('/is-authenticated', (req, res) => {
+app.get(apiRoutePrefix('is-authenticated'), (req, res) => {
 	if (req.isAuthenticated()) {
 		return res.status(statusCodes.OK).json({ isAuth: true });
 	}
 	return res.status(statusCodes.UNAUTHORIZED).json({ isAuth: false });
 });
 
-app.get('/logout', (req, res) => {
+app.get(apiRoutePrefix('logout'), (req, res) => {
 	req.logout(() => {});
 	res.clearCookie('connect.sid');
 	res.status(200).json({ message: 'logged out' });
 });
 
 // route to get current user info
-app.get('/user', (req, res) => {
+app.get(apiRoutePrefix('user'), (req, res) => {
 	if (req.isAuthenticated()) {
 		console.log('User authenticated');
 		const user = req.user as User;
