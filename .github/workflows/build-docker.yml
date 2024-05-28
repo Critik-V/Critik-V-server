@@ -36,20 +36,19 @@ jobs:
           PDF_CONVERTER_SERVICE: ${{ secrets.PDF_CONVERTER_SERVICE }}
           PDF_CONVERTER_PORT: ${{ secrets.PDF_CONVERTER_PORT }}
         shell: bash
-        run: |
-          cp ./server/.env.example ./server/.env
-          sed -i "s/NODE_ENV=.*$/NODE_ENV=$NODE_ENV/" ./server/.env
-          sed -i "s/SERVER_PORT=.*$/SERVER_PORT=$SERVER_PORT/" ./server/.env
-          sed -i "s/DB_SERVICE=.*$/DB_SERVICE=$DB_SERVICE/" ./server/.env
-          sed -i "s/API_NAME=.*$/API_NAME=$API_NAME/" ./server/.env
-          sed -i "s/GOOGLE_CLIENT_ID=.*$/GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID/" ./server/.env
-          sed -i "s/GOOGLE_CLIENT_SECRET=.*$/GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET/" ./server/.env
-          sed -i "s/GOOGLE_REDIRECT_URI=.*$/GOOGLE_REDIRECT_URI=$GOOGLE_REDIRECT_URI/" ./server/.env
-          sed -i "s/SESSION_SECRET=.*$/SESSION_SECRET=$SESSION_SECRET/" ./server/.env
-          sed -i "s/CLIENT_SERVICE=.*$/CLIENT_SERVICE=$CLIENT_SERVICE/" ./server/.env
-          sed -i "s/CLIENT_PORT=.*$/CLIENT_PORT=$CLIENT_PORT/" ./server/.env
-          sed -i "s/PDF_CONVERTER_SERVICE=.*$/PDF_CONVERTER_SERVICE=$PDF_CONVERTER_SERVICE/" ./server/.env
-          sed -i "s/PDF_CONVERTER_PORT=.*$/PDF_CONVERTER_PORT=$PDF_CONVERTER_PORT/" ./server/.env
+        run: cp ./server/.env.example ./server/.env
+          # sed -i "s/NODE_ENV=.*$/NODE_ENV=$NODE_ENV/" ./server/.env
+          # sed -i "s/SERVER_PORT=.*$/SERVER_PORT=$SERVER_PORT/" ./server/.env
+          # sed -i "s/DB_SERVICE=.*$/DB_SERVICE=$DB_SERVICE/" ./server/.env
+          # sed -i "s/API_NAME=.*$/API_NAME=$API_NAME/" ./server/.env
+          # sed -i "s/GOOGLE_CLIENT_ID=.*$/GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID/" ./server/.env
+          # sed -i "s/GOOGLE_CLIENT_SECRET=.*$/GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET/" ./server/.env
+          # sed -i "s/GOOGLE_REDIRECT_URI=.*$/GOOGLE_REDIRECT_URI=$GOOGLE_REDIRECT_URI/" ./server/.env
+          # sed -i "s/SESSION_SECRET=.*$/SESSION_SECRET=$SESSION_SECRET/" ./server/.env
+          # sed -i "s/CLIENT_SERVICE=.*$/CLIENT_SERVICE=$CLIENT_SERVICE/" ./server/.env
+          # sed -i "s/CLIENT_PORT=.*$/CLIENT_PORT=$CLIENT_PORT/" ./server/.env
+          # sed -i "s/PDF_CONVERTER_SERVICE=.*$/PDF_CONVERTER_SERVICE=$PDF_CONVERTER_SERVICE/" ./server/.env
+          # sed -i "s/PDF_CONVERTER_PORT=.*$/PDF_CONVERTER_PORT=$PDF_CONVERTER_PORT/" ./server/.env
 
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
