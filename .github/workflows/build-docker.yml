@@ -23,7 +23,7 @@ jobs:
             whoami
             cd /critik-v
             git clone https://github.com/${{github.repository}}.git
-            cd ./${{github.repository}}/server
+            cd ./${{github.event.repository.name}}/server
             cp .env.example .env
             sed -i "s/NODE_ENV=.*$/NODE_ENV=production/" .env
             sed -i "s/SERVER_PORT=.*$/SERVER_PORT=${{secrets.SERVER_PORT}}/" .env
