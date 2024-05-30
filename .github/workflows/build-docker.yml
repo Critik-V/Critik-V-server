@@ -35,7 +35,7 @@ jobs:
           script: |
              whoami
              cd /critik-v
-             git clone ${{github.repositoryUrl}}
+             git clone https://github.com/Critik-V/Critik-V-server.git
 
 
           
