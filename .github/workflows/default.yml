@@ -1,4 +1,4 @@
-name: Push to remote server
+name: Lint & clone repository to remote server
 
 on:
   push:
@@ -6,8 +6,26 @@ on:
       - main
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: install dependencies
+        working-directory: ./server
+        run: pnpm install --frozen-lockfile
+      - name: Run eslint
+        working-directory: ./server
+        shell: bash
+        run: pnpm run lint
+
   build:
     runs-on: ubuntu-latest
+    needs: lint
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
