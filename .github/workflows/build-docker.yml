@@ -30,7 +30,7 @@ jobs:
             sed -i "s/API_NAME=.*$/API_NAME=${{secrets.API_NAME}}/" .env
             sed -i "s/DATABASE_TYPE=.*$/DATABASE_TYPE=${{secrets.DATABASE_TYPE}}/" .env
             sed -i "s/DATABASE_NAME=.*$/DATABASE_NAME=${{secrets.DATABASE_NAME}}/" .env
-            sed -i "s/DATABASE_USER=.*$/DATABASE_HOST=${{secrets.DATABASE_USER}}/" .env
+            sed -i "s/DATABASE_USER=.*$/DATABASE_USER=${{secrets.DATABASE_USER}}/" .env
             sed -i "s/DATABASE_PASSWORD=.*$/DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}}/" .env
             sed -i "s/DATABASE_PORT=.*$/DATABASE_PORT=${{secrets.DATABASE_PORT}}/" .env
             sed -i "s/GOOGLE_CLIENT_ID=.*$/GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}/" .env
