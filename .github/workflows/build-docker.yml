@@ -7,37 +7,36 @@ on:
 
 jobs:
   build:
-    runs-on: Critik-V-Server
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 21
+      # - name: Install pnpm
+      #   run: npm install -g pnpm
+      # - name: Install dependencies
+      #   working-directory: ./server
+      #   run: pnpm install --frozen-lockfile
+
+      # - name: Copy .env.example to .env and modify variables
+      #   shell: bash
+      #   run: cp ./server/.env.example ./server/.env
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 21
-      - name: Install pnpm
-        run: npm install -g pnpm
-      - name: Install dependencies
-        working-directory: ./server
-        run: pnpm install --frozen-lockfile
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          script: |
+             whoami
+             cd /critik-v
+             git clone ${{github.repositoryUrl}}
+             mv ${{github.repository}} critik-v_server
 
-      - name: Copy .env.example to .env and modify variables
-        shell: bash
-        run: cp ./server/.env.example ./server/.env
-
-      - name: Install SSH Client
-        run: sudo apt-get install -y openssh-client
-
-      - name: Connect to Server and Execute Commands
-        env:
-          SSH_USERNAME: root
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-        shell: bash
-        run: |
-          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST
-          cd /critik-v
-          chmod -R 777 /critik-v
-          git clone https://github.com/${{ github.repository }}
 
           
