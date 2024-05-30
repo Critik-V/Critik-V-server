@@ -36,7 +36,6 @@ jobs:
              whoami
              cd /critik-v
              git clone ${{github.repositoryUrl}}
-             mv ${{github.repository}} critik-v_server
 
 
           
