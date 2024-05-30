@@ -11,19 +11,6 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 21
-      # - name: Install pnpm
-      #   run: npm install -g pnpm
-      # - name: Install dependencies
-      #   working-directory: ./server
-      #   run: pnpm install --frozen-lockfile
-
-      # - name: Copy .env.example to .env and modify variables
-      #   shell: bash
-      #   run: cp ./server/.env.example ./server/.env
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
@@ -33,9 +20,20 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-             whoami
-             cd /critik-v
-             git clone https://github.com/Critik-V/Critik-V-server.git
-
-
-          
+            whoami
+            cd /critik-v
+            git clone https://github.com/${{github.repository}}.git
+            cd ./${{github.repository}}/server
+            cp .env.example .env
+            sed -i "s/NODE_ENV=.*$/NODE_ENV=production/" .env
+            sed -i "s/SERVER_PORT=.*$/SERVER_PORT=${{secrets.SERVER_PORT}}/" .env
+            sed -i "s/DB_SERVICE=.*$/DB_SERVICE=$DB_SERVICE/" .env
+            sed -i "s/API_NAME=.*$/API_NAME=$API_NAME/" .env
+            sed -i "s/GOOGLE_CLIENT_ID=.*$/GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}/" .env
+            sed -i "s/GOOGLE_CLIENT_SECRET=.*$/GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}}/" .env
+            sed -i "s/GOOGLE_REDIRECT_URI=.*$/GOOGLE_REDIRECT_URI=${{secrets.GOOGLE_REDIRECT_URI}}/" .env
+            sed -i "s/SESSION_SECRET=.*$/SESSION_SECRET=${{secrets.SESSION_SECRET}}/" .env
+            sed -i "s/CLIENT_SERVICE=.*$/CLIENT_SERVICE=${{secrets.CLIENT_SERVICE}}/" .env
+            sed -i "s/CLIENT_PORT=.*$/CLIENT_PORT=${{secrets.CLIENT_PORT}}/" .env
+            sed -i "s/PDF_CONVERTER_SERVICE=.*$/PDF_CONVERTER_SERVICE=${{secrets.PDF_CONVERTER_SERVICE}}/" .env
+            sed -i "s/PDF_CONVERTER_PORT=.*$/PDF_CONVERTER_PORT=${{secrets.PDF_CONVERTER_PORT}}/" .env
