@@ -1,7 +1,7 @@
 services:
-  db_critik:
+  critik-v_db:
     image: postgres:latest
-    container_name: db_critik
+    container_name: critik-v_db
 
     env_file: ./server/.env
     ports:
@@ -29,7 +29,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      db_critik:
+      critik-v_db:
         condition: service_healthy
     volumes:
       - resumes_pdf:/app/resumes
