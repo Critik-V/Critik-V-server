@@ -39,6 +39,7 @@ jobs:
           script: |
             whoami
             cd /critik-v
+            rm -rf ./${{github.event.repository.name}}
             git clone https://github.com/${{github.repository}}.git
             cd ./${{github.event.repository.name}}/server
             cp .env.example .env
