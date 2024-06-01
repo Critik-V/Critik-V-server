@@ -6,12 +6,13 @@ WORKDIR /app
 
 # copy the package.json and package-lock.json files in the container
 COPY package*.json ./
-
+# copy the pnpm-lock.yaml file in the container
+COPY pnpm-lock.yaml ./
 # install pnpm globally
 RUN npm install -g pnpm
 
 # install requirements with pnpm
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # copy the necessary files in the container
 COPY . .
