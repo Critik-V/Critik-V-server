@@ -47,7 +47,15 @@ export const getNewestPosts = catchAsync(
 		// pagination data
 		const totalPosts = await db.post.count({
 			where: {
+				title: search
+					? {
+							contains: search,
+							mode: 'insensitive',
+						}
+					: undefined,
 				archived: false,
+				jobType: jobType ? jobType : undefined,
+				experienceLevel: experienceLevel ? experienceLevel : undefined,
 			},
 		});
 		const totalPages = Math.ceil(+totalPosts / PageLimit);
@@ -103,7 +111,7 @@ export const makePost = catchAsync(
 			status: string;
 			message: string;
 		} = await pdfToImg.json();
-    
+
 		if (conversionRes.status !== 'success') {
 			await db.post.delete({
 				where: {
