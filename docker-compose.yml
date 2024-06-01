@@ -21,9 +21,9 @@ services:
       - db_critik_data:/var/lib/postgresql/data
 
   # creation of backend
-  backend_critik:
-    image: backend_critik
-    container_name: backend_critik
+  critik-v_server:
+    image: critik-v_server
+    container_name: critik-v_server
     build:
       context: ./server
     ports:
