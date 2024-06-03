@@ -43,6 +43,9 @@ export const getNewestPosts = catchAsync(
 				jobType: jobType ? jobType : undefined,
 				experienceLevel: experienceLevel ? experienceLevel : undefined,
 			},
+			include: {
+				comments: { select: { id: true } },
+			},
 		});
 		// pagination data
 		const totalPosts = await db.post.count({
@@ -179,6 +182,9 @@ export const getMyPosts = catchAsync(async (req: Request, res: Response) => {
 			authorId,
 			archived: false,
 		},
+		include: {
+			comments: { select: { id: true } },
+		},
 	});
 	// pagination data
 	const totalPosts = await db.post.count({
@@ -228,6 +234,9 @@ export const getArchivedPosts = catchAsync(
 			where: {
 				authorId,
 				archived: true,
+			},
+			include: {
+				comments: { select: { id: true } },
 			},
 		});
 		// pagination data
