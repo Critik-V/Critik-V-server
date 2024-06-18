@@ -4,7 +4,7 @@ import { Comment } from '@prisma/client';
 import { db } from '../config';
 
 export const createComment = catchAsync(async (req: Request, res: Response) => {
-	const { postId, content }: Comment = req.body;
+	const { postId, content, posX, posY }: Comment = req.body;
 	const { id: authorId } = req.user as Comment;
 
 	const newComment = await db.comment.create({
@@ -12,6 +12,8 @@ export const createComment = catchAsync(async (req: Request, res: Response) => {
 			postId,
 			authorId,
 			content,
+			posX,
+			posY,
 		},
 	});
 	response(res, statusCodes.CREATED, 'comment created succesfully', newComment);

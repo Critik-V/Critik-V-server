@@ -85,6 +85,8 @@ model Comment {
   updatedAt      DateTime @updatedAt
   upLikes        User[]   @relation("CommentUpLikes")
   downLikes      User[]   @relation("CommentDownLikes")
+  posX           Int      @default(0)
+  posY           Int      @default(0)
 }
 
 model Notification {
