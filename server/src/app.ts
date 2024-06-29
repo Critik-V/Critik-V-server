@@ -33,8 +33,8 @@ app.get(
 app.get(
 	'/auth/google/callback',
 	passport.authenticate('google', {
-		successRedirect: process.env.CLIENT_ORIGIN + '/',
-		failureRedirect: process.env.CLIENT_ORIGIN + '/login',
+		successRedirect: process.env.GOOGLE_SUCCESS_REDIRECT_URL,
+		failureRedirect: process.env.GOOGLE_FAILURE_REDIRECT_URL,
 	})
 );
 
