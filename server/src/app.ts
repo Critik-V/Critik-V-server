@@ -33,11 +33,11 @@ app.get(
 app.get(
 	'/auth/google/callback',
 	passport.authenticate('google', {
-		successRedirect: process.env.DOMAIN_NAME
-			? process.env.DOMAIN_NAME
+		successRedirect: process.env.CLIENT_DOMAIN_NAME
+			? process.env.CLIENT_DOMAIN_NAME
 			: process.env.CLIENT_SERVICE,
-		failureRedirect: process.env.DOMAIN_NAME
-			? process.env.DOMAIN_NAME + '/login'
+		failureRedirect: process.env.CLIENT_DOMAIN_NAME
+			? process.env.CLIENT_DOMAIN_NAME + '/login'
 			: process.env.CLIENT_SERVICE + '/login',
 	})
 );

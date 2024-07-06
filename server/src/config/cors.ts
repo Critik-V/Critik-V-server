@@ -7,7 +7,7 @@ import { CorsOptions } from 'cors';
 // 	'gm'
 // );
 // const domaineName: RegExp = new RegExp(
-// 	`^(https?:\/\/)?(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*${process.env.DOMAIN_NAME}$`,
+// 	`^(https?:\/\/)?(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*${process.env.CLIENT_DOMAIN_NAME}$`,
 // 	'gm'
 // );
 
@@ -22,7 +22,7 @@ const originList = [
 	'http://www.critik-v.me',
 	'https://server.critik-v.me',
 	'http://localhost:3000',
-	'http://localhost:*',
+	'http://localhost',
 ];
 
 const corsAllowedHeadersList: string[] = [
