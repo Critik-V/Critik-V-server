@@ -1,7 +1,7 @@
 // -------------------- CORS -------------------- //
 import { CorsOptions } from 'cors';
 
-const domaineName: string = `${process.env.DOMAINNAME}`;
+const domaineName: string = `${process.env.DOMAIN_NAME}`;
 const clientOrigin: string = `${process.env.CLIENT_ORIGIN}`;
 const clientService: string = `${process.env.CLIENT_SERVICE}`;
 

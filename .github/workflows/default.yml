@@ -59,5 +59,6 @@ jobs:
             sed -i "s/SESSION_SECRET=.*$/SESSION_SECRET=${{secrets.SESSION_SECRET}}/" .env
             sed -i "s/CLIENT_SERVICE=.*$/CLIENT_SERVICE=${{secrets.CLIENT_SERVICE}}/" .env
             sed -i "s/CLIENT_PORT=.*$/CLIENT_PORT=${{secrets.CLIENT_PORT}}/" .env
+            sed -i "s/DOMAIN_NAME=.*$/DOMAIN_NAME=${{secrets.DOMAIN_NAME}}/" .env
             sed -i "s/PDF_CONVERTER_SERVICE=.*$/PDF_CONVERTER_SERVICE=${{secrets.PDF_CONVERTER_SERVICE}}/" .env
             sed -i "s/PDF_CONVERTER_PORT=.*$/PDF_CONVERTER_PORT=${{secrets.PDF_CONVERTER_PORT}}/" .env
