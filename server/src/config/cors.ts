@@ -17,12 +17,19 @@ import { CorsOptions } from 'cors';
 // 	domaineName,
 // ];
 
+// const originList = [
+// 	'http://critik-v.me',
+// 	'http://www.critik-v.me',
+// 	'https://server.critik-v.me',
+// 	'http://localhost:3000',
+// 	'http://localhost',
+// ];
+
 const originList = [
-	'http://critik-v.me',
-	'http://www.critik-v.me',
-	'https://server.critik-v.me',
-	'http://localhost:3000',
-	'http://localhost',
+	`${process.env.PROTOCOL}://${process.env.CLIENT_DOMAIN_NAME}`,
+	`${process.env.PROTOCOL}://www.${process.env.CLIENT_DOMAIN_NAME}`,
+	`${process.env.PROTOCOL}://${process.env.CLIENT_SERVICE}`,
+	`${process.env.PROTOCOL}://${process.env.CLIENT_SERVICE}:${process.env.CLIENT_PORT}`,
 ];
 
 const corsAllowedHeadersList: string[] = [

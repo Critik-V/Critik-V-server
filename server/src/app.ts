@@ -34,10 +34,10 @@ app.get(
 	'/auth/google/callback',
 	passport.authenticate('google', {
 		successRedirect: process.env.CLIENT_DOMAIN_NAME
-			? process.env.CLIENT_DOMAIN_NAME
+			? `${process.env.PROTOCOL}://${process.env.CLIENT_DOMAIN_NAME}`
 			: process.env.CLIENT_SERVICE,
 		failureRedirect: process.env.CLIENT_DOMAIN_NAME
-			? process.env.CLIENT_DOMAIN_NAME + '/login'
+			? `${process.env.PROTOCOL}://${process.env.CLIENT_DOMAIN_NAME}/login`
 			: process.env.CLIENT_SERVICE + '/login',
 	})
 );
