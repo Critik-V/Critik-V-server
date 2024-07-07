@@ -3,3 +3,5 @@ dist
 resumes
 # Keep environment variables out of version control
 .env
+
+seed.txt

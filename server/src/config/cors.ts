@@ -1,30 +1,6 @@
 // -------------------- CORS -------------------- //
 import { CorsOptions } from 'cors';
 
-// const clientOrigin: string = `${process.env.CLIENT_ORIGIN}`;
-// const clientService: RegExp = new RegExp(
-// 	`^(https?:\/\/)?(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*${process.env.CLIENT_SERVICE}(:\d+)?$`,
-// 	'gm'
-// );
-// const domaineName: RegExp = new RegExp(
-// 	`^(https?:\/\/)?(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*${process.env.CLIENT_DOMAIN_NAME}$`,
-// 	'gm'
-// );
-
-// const originList: (string | RegExp)[] = [
-// 	clientOrigin,
-// 	clientService,
-// 	domaineName,
-// ];
-
-// const originList = [
-// 	'http://critik-v.me',
-// 	'http://www.critik-v.me',
-// 	'https://server.critik-v.me',
-// 	'http://localhost:3000',
-// 	'http://localhost',
-// ];
-
 const originList = [
 	`${process.env.PROTOCOL}://${process.env.CLIENT_DOMAIN_NAME}`,
 	`${process.env.PROTOCOL}://www.${process.env.CLIENT_DOMAIN_NAME}`,

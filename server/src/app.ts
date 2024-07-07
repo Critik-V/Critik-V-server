@@ -35,10 +35,10 @@ app.get(
 	passport.authenticate('google', {
 		successRedirect: process.env.CLIENT_DOMAIN_NAME
 			? `${process.env.PROTOCOL}://${process.env.CLIENT_DOMAIN_NAME}`
-			: process.env.CLIENT_SERVICE,
+			: `${process.env.CLIENT_ORIGIN}`,
 		failureRedirect: process.env.CLIENT_DOMAIN_NAME
 			? `${process.env.PROTOCOL}://${process.env.CLIENT_DOMAIN_NAME}/login`
-			: process.env.CLIENT_SERVICE + '/login',
+			: process.env.CLIENT_ORIGIN + '/login',
 	})
 );
 
