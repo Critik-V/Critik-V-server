@@ -1,7 +1,7 @@
 // --------------------- IMPORTS --------------------- //
 import { NextFunction, Request, Response } from 'express';
 import app from './app';
-import { database, db, server } from './config';
+import { database, server } from './config';
 import { ErrorHandlers, Panic } from './errors';
 import { commentRouter, notifRouter, postRouter, userRouter } from './routes';
 import { apiRoutePrefix, statusCodes } from './utils';
