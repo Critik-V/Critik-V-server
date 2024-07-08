@@ -80,6 +80,12 @@ export const makePost = catchAsync(
 		if (!file)
 			return next(new Panic('no file uploaded', statusCodes.BAD_REQUEST));
 		const { title, description, jobType, experienceLevel }: Post = req.body;
+		if (!title || !description || !jobType || !experienceLevel) {
+			fs.unlinkSync(file.path);
+			return next(
+				new Panic('please provide all required fields', statusCodes.BAD_REQUEST)
+			);
+		}
 		const { id: authorId } = req.user as Post;
 		const newPost = await db.post.create({
 			data: {
@@ -130,25 +136,32 @@ export const makePost = catchAsync(
 );
 
 // MODIFY POST
-export const updatePost = catchAsync(async (req: Request, res: Response) => {
-	const { id }: { id: string } = req.params as { id: string };
-	const { title, description, jobType, experienceLevel }: Post = req.body;
-	const { id: authorId } = req.user as Post;
-	const post = await db.post.update({
-		where: {
-			id,
-			authorId,
-		},
-		data: {
-			title,
-			description,
-			jobType,
-			experienceLevel,
-		},
-	});
+export const updatePost = catchAsync(
+	async (req: Request, res: Response, next: NextFunction) => {
+		const { id }: { id: string } = req.params as { id: string };
+		const { title, description, jobType, experienceLevel }: Post = req.body;
+		if (!title || !description || !jobType || !experienceLevel) {
+			return next(
+				new Panic('please provide all required fields', statusCodes.BAD_REQUEST)
+			);
+		}
+		const { id: authorId } = req.user as Post;
+		const post = await db.post.update({
+			where: {
+				id,
+				authorId,
+			},
+			data: {
+				title,
+				description,
+				jobType,
+				experienceLevel,
+			},
+		});
 
-	response(res, statusCodes.OK, 'post modified succesfully', post);
-});
+		response(res, statusCodes.OK, 'post modified succesfully', post);
+	}
+);
 
 // DELETE POST
 export const deletePost = catchAsync(async (req: Request, res: Response) => {

@@ -1,38 +1,61 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { catchAsync, response, statusCodes } from '../utils';
 import { Comment } from '@prisma/client';
 import { db } from '../config';
+import { Panic } from '../errors';
 
-export const createComment = catchAsync(async (req: Request, res: Response) => {
-	const { postId, content }: Comment = req.body;
-	const { id: authorId } = req.user as Comment;
+export const createComment = catchAsync(
+	async (req: Request, res: Response, next: NextFunction) => {
+		const { postId, content }: Comment = req.body;
+		const { id: authorId } = req.user as Comment;
+		if (!postId || !content) {
+			return next(
+				new Panic('postId and content are required', statusCodes.BAD_REQUEST)
+			);
+		}
 
-	const newComment = await db.comment.create({
-		data: {
-			postId,
-			authorId,
-			content,
-		},
-	});
-	response(res, statusCodes.CREATED, 'comment created succesfully', newComment);
-});
+		const newComment = await db.comment.create({
+			data: {
+				postId,
+				authorId,
+				content,
+			},
+		});
+		response(
+			res,
+			statusCodes.CREATED,
+			'comment created succesfully',
+			newComment
+		);
+	}
+);
 
-export const updateComment = catchAsync(async (req: Request, res: Response) => {
-	const { id }: { id: string } = req.params as { id: string };
-	const { content }: Comment = req.body;
-	const { id: authorId } = req.user as Comment;
+export const updateComment = catchAsync(
+	async (req: Request, res: Response, next: NextFunction) => {
+		const { id }: { id: string } = req.params as { id: string };
+		const { content }: Comment = req.body;
+		if (!content) {
+			return next(new Panic('content is required', statusCodes.BAD_REQUEST));
+		}
+		const { id: authorId } = req.user as Comment;
 
-	const updatedComment = await db.comment.update({
-		where: {
-			id,
-			authorId,
-		},
-		data: {
-			content,
-		},
-	});
-	response(res, statusCodes.OK, 'comment updated succesfully', updatedComment);
-});
+		const updatedComment = await db.comment.update({
+			where: {
+				id,
+				authorId,
+			},
+			data: {
+				content,
+			},
+		});
+		response(
+			res,
+			statusCodes.OK,
+			'comment updated succesfully',
+			updatedComment
+		);
+	}
+);
 
 export const deleteComment = catchAsync(async (req: Request, res: Response) => {
 	const { id }: { id: string } = req.params as { id: string };

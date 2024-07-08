@@ -44,7 +44,7 @@ networks:
 volumes:
   db_critik_data:
     driver: local
-  resumes_images:
-    driver: local
-  resumes_pdf:
-    driver: local
+  # resumes_images:
+  #   driver: local
+  # resumes_pdf:
+  #   driver: local
