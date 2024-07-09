@@ -60,7 +60,6 @@ app.get(apiRoutePrefix('user'), (req, res) => {
 	if (req.isAuthenticated()) {
 		console.log('User authenticated');
 		const user = req.user as User;
-		user.id = '';
 		user.oauthId = '';
 		return res.status(200).json(req.user);
 	}
