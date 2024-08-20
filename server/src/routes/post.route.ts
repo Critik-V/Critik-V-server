@@ -5,6 +5,16 @@ import { isAuthenticated } from '../auth';
 
 const upload = multer({
 	storage: multer.memoryStorage(),
+	limits: {
+		fileSize: 3 * 1024 * 1024, // no larger than 3mb
+	},
+	fileFilter: (req, file, cb) => {
+		if (file.mimetype === 'application/pdf') {
+			cb(null, true);
+		} else {
+			cb(new Error('File type not supported'));
+		}
+	},
 });
 
 const router = Router();
