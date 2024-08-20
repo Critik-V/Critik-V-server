@@ -3,7 +3,7 @@ import { catchAsync, response, statusCodes } from '../utils';
 import { ExprerienceLevel, JobType, Post } from '@prisma/client';
 import { db } from '../config';
 import fs from 'node:fs';
-import { Panic } from '../errors';
+import { ErrorsMessages, Panic } from '../errors';
 
 const PageLimit: number = 12;
 
@@ -78,12 +78,14 @@ export const makePost = catchAsync(
 	async (req: Request, res: Response, next: NextFunction) => {
 		const { file } = req;
 		if (!file)
-			return next(new Panic('no file uploaded', statusCodes.BAD_REQUEST));
+			return next(
+				new Panic(ErrorsMessages.FILE_REQUIRED, statusCodes.BAD_REQUEST)
+			);
 		const { title, description, jobType, experienceLevel }: Post = req.body;
 		if (!title || !description || !jobType || !experienceLevel) {
 			fs.unlinkSync(file.path);
 			return next(
-				new Panic('please provide all required fields', statusCodes.BAD_REQUEST)
+				new Panic(ErrorsMessages.ALL_REQUIRED, statusCodes.BAD_REQUEST)
 			);
 		}
 		const { id: authorId } = req.user as Post;
@@ -105,31 +107,36 @@ export const makePost = catchAsync(
 		}
 
 		if (file) {
-			fs.writeFileSync(destinationDirectory + filename, file.buffer);
+			fs.writeFileSync(destinationDirectory + filename, new Uint8Array(file.buffer));
 		}
 
-		const pdfToImg = await fetch(`${process.env.PDF_CONVERTER_URL}`, {
+		await fetch(`${process.env.PDF_CONVERTER_URL}`, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify({
 				filename: newPost.id,
 			}),
-		});
-
-		const conversionRes: {
-			status: string;
-			message: string;
-		} = await pdfToImg.json();
-
-		if (conversionRes.status !== 'success') {
+		}).catch(async () => {
 			await db.post.delete({
 				where: {
 					id: newPost.id,
 				},
 			});
 			fs.unlinkSync(destinationDirectory + filename);
-			throw new Panic('pdf converter failed', statusCodes.BAD_REQUEST);
-		}
+			throw new Panic(
+				ErrorsMessages.PDF_CONVERT_FAILED,
+				statusCodes.BAD_REQUEST
+			);
+		});
+
+		// const conversionRes: {
+		// 	status: string;
+		// 	message: string;
+		// } = await pdfToImg.json();
+
+		// if (conversionRes.status !== 'success') {
+
+		// }
 
 		response(res, statusCodes.CREATED, 'post created succesfully', newPost);
 	}
@@ -142,7 +149,7 @@ export const updatePost = catchAsync(
 		const { title, description, jobType, experienceLevel }: Post = req.body;
 		if (!title || !description || !jobType || !experienceLevel) {
 			return next(
-				new Panic('please provide all required fields', statusCodes.BAD_REQUEST)
+				new Panic(ErrorsMessages.ALL_REQUIRED, statusCodes.BAD_REQUEST)
 			);
 		}
 		const { id: authorId } = req.user as Post;
@@ -369,10 +376,7 @@ export const favPost = catchAsync(async (req: Request, res: Response) => {
 			},
 		});
 	} else {
-		throw new Panic(
-			'Invalid action or post not found',
-			statusCodes.BAD_REQUEST
-		);
+		throw new Panic(ErrorsMessages.IMPOSSIBLE_ACTION, statusCodes.BAD_REQUEST);
 	}
 
 	response(res, statusCodes.OK, 'resume saved succesfully', updatedUser);

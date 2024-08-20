@@ -9,7 +9,7 @@ import {
 } from '../utils';
 import { db } from '../config';
 import { User } from '@prisma/client';
-import { Panic } from '../errors';
+import { ErrorsMessages, Panic } from '../errors';
 
 export const createUser = catchAsync(async (req: Request, res: Response) => {
 	const { oauthId, fullname }: User = req.body;
@@ -36,13 +36,13 @@ export const updateUser = catchAsync(
 		const { id } = req.user as User;
 
 		linkedinLink && !linkedinPattern.test(linkedinLink)
-			? next(new Panic('invalid linkedin link', statusCodes.BAD_REQUEST))
+			? next(new Panic(ErrorsMessages.INVALID_LINKEDIN_LINK, statusCodes.BAD_REQUEST))
 			: null;
 		githubLink && !githubPattern.test(githubLink)
-			? next(new Panic('invalid github link', statusCodes.BAD_REQUEST))
+			? next(new Panic(ErrorsMessages.INVALID_GITHUB_LINK, statusCodes.BAD_REQUEST))
 			: null;
 		otherLink && !otherPattern.test(otherLink)
-			? next(new Panic('invalid other link', statusCodes.BAD_REQUEST))
+			? next(new Panic(ErrorsMessages.INVALID_OTHER_LINK, statusCodes.BAD_REQUEST))
 			: null;
 
 		const updatedUser = await db.user.update({
