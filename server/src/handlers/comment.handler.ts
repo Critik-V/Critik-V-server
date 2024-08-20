@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { catchAsync, response, statusCodes } from '../utils';
+import { catchAsync, response, statusCodes, containsBadWord } from '../utils';
 import { Comment } from '@prisma/client';
 import { db } from '../config';
-import { Panic } from '../errors';
+import { ErrorsMessages, Panic } from '../errors';
 
 export const createComment = catchAsync(
 	async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +10,13 @@ export const createComment = catchAsync(
 		const { id: authorId } = req.user as Comment;
 		if (!postId || !content) {
 			return next(
-				new Panic('postId and content are required', statusCodes.BAD_REQUEST)
+				new Panic(ErrorsMessages.CONTENT_REQUIRED, statusCodes.BAD_REQUEST)
+			);
+		}
+
+		if (containsBadWord(content)) {
+			return next(
+				new Panic(ErrorsMessages.INAPROPRIATE_CONTENT, statusCodes.BAD_REQUEST)
 			);
 		}
 
@@ -35,7 +41,7 @@ export const updateComment = catchAsync(
 		const { id }: { id: string } = req.params as { id: string };
 		const { content }: Comment = req.body;
 		if (!content) {
-			return next(new Panic('content is required', statusCodes.BAD_REQUEST));
+			return next(new Panic(ErrorsMessages.CONTENT_REQUIRED, statusCodes.BAD_REQUEST));
 		}
 		const { id: authorId } = req.user as Comment;
 
