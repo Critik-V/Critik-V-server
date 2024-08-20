@@ -1,4 +1,5 @@
-import ErrorHandlers from "./ErrorHandlers";
-import Panic from "./Panic";
+import ErrorHandlers from './ErrorHandlers';
+import ErrorsMessages from './ErrorsMessages';
+import Panic from './Panic';
 
-export { ErrorHandlers, Panic };
+export { ErrorHandlers, ErrorsMessages, Panic };
